@@ -29,6 +29,9 @@ public class SegmentInfo implements Serializable, Comparable<SegmentInfo> {
 	public void setSource(String source) {
 		this.source = source;
 	}
+	public boolean hasSource() {
+		return source != null;
+	}
 
 	public boolean isEmpty() {
 		return empty;
@@ -65,6 +68,10 @@ public class SegmentInfo implements Serializable, Comparable<SegmentInfo> {
 	}	
 	public boolean isPlayed() {
 		return endTime != null;
+	}
+	
+	public SegmentInfo(String id, long duration) {
+		this(id, duration, null);
 	}
 	
 	public SegmentInfo(String id, long duration, String source) {

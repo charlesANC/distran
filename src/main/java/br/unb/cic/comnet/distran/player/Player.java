@@ -107,8 +107,8 @@ public class Player {
 		}
 	}
 	
-	public void updateSegmentsSource(List<SegmentInfo> playlist) {
-		for(SegmentInfo seg : playlist) {
+	public void updateSegmentsSource(List<Segment> playlist) {
+		for(Segment seg : playlist) {
 			if (segmentsInfo.containsKey(seg.getId())) {
 				SegmentInfo oldSeg = segmentsInfo.get(seg.getId());
 				if (oldSeg.isEmpty()) {

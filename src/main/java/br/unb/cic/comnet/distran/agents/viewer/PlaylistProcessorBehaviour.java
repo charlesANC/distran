@@ -1,14 +1,12 @@
 package br.unb.cic.comnet.distran.agents.viewer;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
+import com.google.gson.reflect.TypeToken;
 
 import br.unb.cic.comnet.distran.agents.MessageProtocols;
-import br.unb.cic.comnet.distran.util.SerializeHelper;
-import jade.core.AID;
+import br.unb.cic.comnet.distran.player.Segment;
+import br.unb.cic.comnet.distran.util.SerializationHelper;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.util.Logger;
@@ -30,40 +28,12 @@ public class PlaylistProcessorBehaviour extends ViewerMessageProcessorBehaviour 
 
 	@Override
 	public void doAction(ACLMessage msg) {
-		Map<String, String> playlist = convertContent(msg);
+		List<Segment> playlist = convertContent(msg);
 		logger.log(Logger.INFO, playlist.toString());		
-		
-		if (playlist.isEmpty()) return;
-		
-		List<String> segments = new ArrayList<String>(playlist.keySet());
-		
-		String nextSegment = "S" + getAgent().nextSegment();
-		while (nextSegment.compareTo(segments.get(0)) < 0) {
-			nextSegment = "S" + getAgent().nextSegment();
-		}
-		
-		if (!playlist.containsKey(nextSegment)) return;
-		
-		ACLMessage rqst = new ACLMessage(ACLMessage.REQUEST);
-		rqst.addReceiver(new AID(playlist.get(nextSegment), true));
-		rqst.setProtocol(MessageProtocols.send_segment.toString());
-		rqst.setContent(nextSegment);
-		getAgent().send(rqst);
+		getAgent().getPlayer().updateSegmentsSource(playlist);
 	}
 
-	private Map<String, String> convertContent(ACLMessage msg)  {
-		try {
-			return SerializeHelper.unserialize(msg.getContent());
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-			logger.log(Logger.WARNING, "Error during unserialization: " + e.getMessage());
-		} catch (IOException e) {
-			e.printStackTrace();
-			logger.log(Logger.WARNING, "Error during unserialization: " + e.getMessage());			
-		}	
-		return new HashMap<String, String>();
+	private List<Segment> convertContent(ACLMessage msg)  {
+		return SerializationHelper.unserialize(msg.getContent(), new TypeToken<List<Segment>>(){});
 	}
-	
-	
-
 }

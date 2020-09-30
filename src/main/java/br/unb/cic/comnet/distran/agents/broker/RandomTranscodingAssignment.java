@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-import java.util.Set;
 
 import br.unb.cic.comnet.distran.agents.MessageProtocols;
+import br.unb.cic.comnet.distran.player.Segment;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
@@ -23,7 +23,7 @@ public class RandomTranscodingAssignment extends BrokerTickerBehaviour {
 
 	@Override
 	protected void onTick() {
-		notAssignedSegments().stream().forEach(seg -> {
+		getAgent().getNonAssignedSegments().stream().forEach(seg -> {
 			Optional<AID> opTranscoder = getRandomTranscoder();
 			
 			if (opTranscoder.isPresent()) {
@@ -32,17 +32,11 @@ public class RandomTranscodingAssignment extends BrokerTickerBehaviour {
 				logger.log(Logger.INFO, "Assigning seg " + seg + " to " + aid);
 				
 				sendAssignmentMessage(seg, aid);
-				getAgent().addAssignment(seg, aid.getName());				
+				seg.setSource(aid.getName());				
 			} else {
 				logger.log(Logger.INFO, "Has no transcoder to assign anything!");				
 			}
 		});
-	}
-	
-	private Set<String> notAssignedSegments() {
-		Set<String> notAssigned = getAgent().getSegments();
-		notAssigned.removeAll(getAgent().getAssignments().keySet());
-		return notAssigned;
 	}
 	
 	private Optional<AID> getRandomTranscoder() {
@@ -54,11 +48,11 @@ public class RandomTranscodingAssignment extends BrokerTickerBehaviour {
 		return Optional.ofNullable(transcoders.get(rand));
 	}
 	
-	private void sendAssignmentMessage(String segment, AID transcoder) {
+	private void sendAssignmentMessage(Segment segment, AID transcoder) {
 		ACLMessage msg = new ACLMessage(ACLMessage.PROPOSE);
 		msg.setProtocol(MessageProtocols.transcode.toString());
 		msg.addReceiver(transcoder);
-		msg.setContent(segment);
+		msg.setContent(segment.getId());
 		getAgent().send(msg);
 	}
 }

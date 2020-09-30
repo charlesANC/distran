@@ -1,11 +1,15 @@
 package br.unb.cic.comnet.distran.agents.broker;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import br.unb.cic.comnet.distran.agents.services.BrokerageServiceDescriptor;
+import br.unb.cic.comnet.distran.player.Segment;
 import jade.core.AID;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
@@ -18,15 +22,13 @@ public class SequentialBroker extends Broker {
 	Logger logger = Logger.getJADELogger(getClass().getName());
 	
 	private Set<AID> transcoders;
-	private Set<String> segments;
-	private Map<String, String> assignments;
+	private Set<Segment> segments;
 	
 	public SequentialBroker() {
 		super();
 		
 		transcoders = new TreeSet<AID>();
-		segments = new TreeSet<String>();
-		assignments = new LinkedHashMap<String, String>();
+		segments = new LinkedHashSet<Segment>();
 	}
 	
 	@Override
@@ -40,15 +42,33 @@ public class SequentialBroker extends Broker {
 		
 		publishMe();		
 	}
+	
+	@Override
+	public boolean hasNoSegments() {
+		return segments.isEmpty();
+	}
 
 	@Override
-	public void addSegment(String segment) {
+	public void addSegment(Segment segment) {
 		segments.add(segment);
 	}
 	
 	@Override
-	public Set<String> getSegments() {
-		return new TreeSet<String>(segments);
+	public List<Segment> getPlaylist() {
+		Collection<Segment> segs = 
+			segments.stream()
+				.filter(Segment::hasSource)
+				.sorted()
+				.collect(Collectors.toList());
+		
+		return new ArrayList<Segment>(segs);
+	}
+	
+	@Override
+	public List<Segment> getNonAssignedSegments() {
+		return segments.stream()
+				.filter(x->{return !x.hasSource();})
+				.collect(Collectors.toList());
 	}
 	
 	@Override
@@ -61,16 +81,6 @@ public class SequentialBroker extends Broker {
 		return new TreeSet<AID>(transcoders);
 	}	
 	
-	@Override
-	public void addAssignment(String segment, String transcoder) {
-		assignments.put(segment, transcoder);
-	}
-
-	@Override
-	public Map<String, String> getAssignments() {
-		return new LinkedHashMap<String, String>(assignments);
-	}
-	
 	private void publishMe() {
 		DFAgentDescription desc = new DFAgentDescription();
 		desc.setName(getAID());
@@ -82,5 +92,5 @@ public class SequentialBroker extends Broker {
 			logger.log(Logger.SEVERE, "I cannot publish myself. I am useless. I must die! " + getName());
 			doDelete();
 		}
-	}	
+	}
 }

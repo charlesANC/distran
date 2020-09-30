@@ -1,5 +1,6 @@
 package br.unb.cic.comnet.distran.agents.viewer;
 
+import br.unb.cic.comnet.distran.player.Player;
 import jade.core.AID;
 import jade.core.Agent;
 
@@ -10,9 +11,5 @@ public abstract class Viewer extends Agent {
 	public abstract AID getBroker();
 	public abstract void setBroker(AID broker);
 	
-	public abstract boolean hasEmptySlot();
-	public abstract int nextSegment();
-	
-	public abstract void removeFirstSegment();
-	public abstract void addSegment(String segment);
+	public abstract Player getPlayer();
 }

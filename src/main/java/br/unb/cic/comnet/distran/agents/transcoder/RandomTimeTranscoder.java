@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import br.unb.cic.comnet.distran.agents.services.TranscodingServiceDescriptor;
+import br.unb.cic.comnet.distran.player.Segment;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
@@ -15,11 +16,11 @@ public class RandomTimeTranscoder extends Transcoder {
 	
 	Logger logger = Logger.getJADELogger(getClass().getName());
 	
-	private Map<String, String> segments;
+	private Map<String, Segment> segments;
 	
 	protected void setup() {
 		logger.log(Logger.INFO, "Starting transcoder " + getName());
-		segments = new ConcurrentHashMap<String, String>();
+		segments = new ConcurrentHashMap<String, Segment>();
 		
 		addBehaviour(new SegmentProviderBehaviour(1000, 2000));
 		addBehaviour(new TranscodeSegmentBehaviour(300, 400));
@@ -28,13 +29,13 @@ public class RandomTimeTranscoder extends Transcoder {
 	}
 
 	@Override
-	public Optional<String> getSegment(String key) {
+	public Optional<Segment> getSegment(String key) {
 		return Optional.ofNullable(segments.get(key));
 	}
 	
 	@Override
-	public void addSegment(String key, String segment) {
-		segments.put(key, segment);
+	public void addSegment(Segment segment) {
+		segments.put(segment.getId(), segment);
 	}
 	
 	private void publishMe() {

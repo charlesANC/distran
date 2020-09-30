@@ -53,51 +53,50 @@ public class TestPlayer {
 		public void run() {
 			System.out.println("Serving " + seg.getId() + "... ");
 	
-			Random rand = new Random();
-			seg.receive((500*1024 + 500 * Long.valueOf(rand.nextInt(1024))));
+			seg.receive((500*1024 + 500 * Long.valueOf(new Random().nextInt(1024))));
 		}		
 	}
 
 	public static void main(String[] args) {
-		Player player = new Player(3);
+		Player player = new Player(5);
 		
-		List<SegmentInfo> playlist = new LinkedList<SegmentInfo>();
-		playlist.add(new SegmentInfo("a1", 2000, "t1"));
-		playlist.add(new SegmentInfo("a2", 2000, "t1"));
-		playlist.add(new SegmentInfo("a3", 2000, "t1"));
-		playlist.add(new SegmentInfo("a4", 2000, "t1"));
-		playlist.add(new SegmentInfo("a5", 2000, "t1"));
-		playlist.add(new SegmentInfo("a6", 2000, "t1"));
-		playlist.add(new SegmentInfo("a7", 2000, "t1"));
-		playlist.add(new SegmentInfo("a8", 2000, "t1"));
-		playlist.add(new SegmentInfo("a9", 2000, "t1"));
-		playlist.add(new SegmentInfo("b1", 2000, "t1"));
-		playlist.add(new SegmentInfo("b2", 2000, "t1"));
-		playlist.add(new SegmentInfo("b3", 2000, "t1"));
-		playlist.add(new SegmentInfo("b4", 2000, "t1"));
-		playlist.add(new SegmentInfo("b5", 2000, "t1"));
-		playlist.add(new SegmentInfo("b6", 2000, "t1"));
-		playlist.add(new SegmentInfo("b7", 2000, "t1"));
-		playlist.add(new SegmentInfo("b8", 2000, "t1"));
-		playlist.add(new SegmentInfo("b9", 2000, "t1"));	
-		playlist.add(new SegmentInfo("c1", 2000, "t1"));
-		playlist.add(new SegmentInfo("c2", 2000, "t1"));
-		playlist.add(new SegmentInfo("c3", 2000, "t1"));
-		playlist.add(new SegmentInfo("c4", 2000, "t1"));
-		playlist.add(new SegmentInfo("c5", 2000, "t1"));
-		playlist.add(new SegmentInfo("c6", 2000, "t1"));
-		playlist.add(new SegmentInfo("c7", 2000, "t1"));
-		playlist.add(new SegmentInfo("c8", 2000, "t1"));
-		playlist.add(new SegmentInfo("c9", 2000, "t1"));	
-		playlist.add(new SegmentInfo("d1", 2000, "t1"));
-		playlist.add(new SegmentInfo("d2", 2000, "t1"));
-		playlist.add(new SegmentInfo("d3", 2000, "t1"));
-		playlist.add(new SegmentInfo("d4", 2000, "t1"));
-		playlist.add(new SegmentInfo("d5", 2000, "t1"));
-		playlist.add(new SegmentInfo("d6", 2000, "t1"));
-		playlist.add(new SegmentInfo("d7", 2000, "t1"));
-		playlist.add(new SegmentInfo("d8", 2000, "t1"));
-		playlist.add(new SegmentInfo("d9", 2000, "t1"));		
+		List<Segment> playlist = new LinkedList<Segment>();
+		playlist.add(Segment.create("a1", 2000L, "t1"));
+		playlist.add(Segment.create("a2", 2000L, "t1"));
+		playlist.add(Segment.create("a3", 2000L, "t1"));
+		playlist.add(Segment.create("a4", 2000L, "t1"));
+		playlist.add(Segment.create("a5", 2000L, "t1"));
+		playlist.add(Segment.create("a6", 2000L, "t1"));
+		playlist.add(Segment.create("a7", 2000L, "t1"));
+		playlist.add(Segment.create("a8", 2000L, "t1"));
+		playlist.add(Segment.create("a9", 2000L, "t1"));
+		playlist.add(Segment.create("b1", 2000L, "t1"));
+		playlist.add(Segment.create("b2", 2000L, "t1"));
+		playlist.add(Segment.create("b3", 2000L, "t1"));
+		playlist.add(Segment.create("b4", 2000L, "t1"));
+		playlist.add(Segment.create("b5", 2000L, "t1"));
+		playlist.add(Segment.create("b6", 2000L, "t1"));
+		playlist.add(Segment.create("b7", 2000L, "t1"));
+		playlist.add(Segment.create("b8", 2000L, "t1"));
+		playlist.add(Segment.create("b9", 2000L, "t1"));	
+		playlist.add(Segment.create("c1", 2000L, "t1"));
+		playlist.add(Segment.create("c2", 2000L, "t1"));
+		playlist.add(Segment.create("c3", 2000L, "t1"));
+		playlist.add(Segment.create("c4", 2000L, "t1"));
+		playlist.add(Segment.create("c5", 2000L, "t1"));
+		playlist.add(Segment.create("c6", 2000L, "t1"));
+		playlist.add(Segment.create("c7", 2000L, "t1"));
+		playlist.add(Segment.create("c8", 2000L, "t1"));
+		playlist.add(Segment.create("c9", 2000L, "t1"));	
+		playlist.add(Segment.create("d1", 2000L, "t1"));
+		playlist.add(Segment.create("d2", 2000L, "t1"));
+		playlist.add(Segment.create("d3", 2000L, "t1"));
+		playlist.add(Segment.create("d4", 2000L, "t1"));
+		playlist.add(Segment.create("d5", 2000L, "t1"));
+		playlist.add(Segment.create("d6", 2000L, "t1"));
+		playlist.add(Segment.create("d7", 2000L, "t1"));
+		playlist.add(Segment.create("d8", 2000L, "t1"));
+		playlist.add(Segment.create("d9", 2000L, "t1"));		
 		
 		player.updateSegmentsSource(playlist);
 		

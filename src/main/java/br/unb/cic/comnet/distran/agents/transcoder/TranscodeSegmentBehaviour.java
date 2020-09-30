@@ -1,8 +1,9 @@
 package br.unb.cic.comnet.distran.agents.transcoder;
 
-import java.time.LocalDateTime;
+import java.util.Random;
 
 import br.unb.cic.comnet.distran.agents.MessageProtocols;
+import br.unb.cic.comnet.distran.player.Segment;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.util.Logger;
@@ -26,7 +27,10 @@ public class TranscodeSegmentBehaviour extends TranscoderMsgProcessorBehaviour {
 	public void doAction(ACLMessage msg) {
 		logger.log(Logger.INFO, getAgent().getName() + ": Adding segment " + msg.getContent());
 		
-		getAgent().addSegment(msg.getContent(), LocalDateTime.now().toString());
+		Segment segment = Segment.create(msg.getContent(), 2000L, getAgent().getName());
+		segment.setLength(500*1024 + 500 * Long.valueOf(new Random().nextInt(1024)));
+		
+		getAgent().addSegment(segment);
 		
 		ACLMessage rsp = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
 		rsp.addReceiver(msg.getSender());
