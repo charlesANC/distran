@@ -1,5 +1,6 @@
 package br.unb.cic.comnet.distran.agents.transcoder;
 
+import java.security.InvalidParameterException;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -18,15 +19,32 @@ public class RandomTimeTranscoder extends Transcoder {
 	
 	private Map<String, Segment> segments;
 	
+	public TranscoderProfile getProfile() {
+		if (getArguments().length == 0) {
+			throw new InvalidParameterException("A agent transcoder needs a profile as argument.");
+		}
+		
+		TranscoderProfile profile = TranscoderProfile.valueOf(getArguments()[0].toString());
+		
+		if (profile == null) {
+			throw new InvalidParameterException(getArguments()[0] + " is not a valid transcoder profile.");			
+		}
+		
+		return profile;
+	}
+	
 	protected void setup() {
-		logger.log(Logger.INFO, "Starting transcoder " + getName());
+		TranscoderProfile profile = getProfile();
+		
+		logger.log(Logger.INFO, "Starting transcoder " + getName() + " with profile " + profile.toString());
 		segments = new ConcurrentHashMap<String, Segment>();
 		
-		addBehaviour(new SegmentProviderBehaviour(1000, 2000));
-		addBehaviour(new TranscodeSegmentBehaviour(300, 400));
+		addBehaviour(new SegmentProviderBehaviour(profile.getLowerServingTime(), profile.getHigherServingTime()));
+		addBehaviour(new TranscodeSegmentBehaviour(profile.getLowerTranscodingTime(), profile.getHigherTranscodingTime()));
 		
 		publishMe();
 	}
+	
 
 	@Override
 	public Optional<Segment> getSegment(String key) {

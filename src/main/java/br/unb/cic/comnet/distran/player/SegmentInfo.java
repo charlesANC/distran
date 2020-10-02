@@ -106,11 +106,19 @@ public class SegmentInfo implements Serializable, Comparable<SegmentInfo> {
 	public double maxUtility() {
 		return length / duration;
 	}
+	
+	public double standardUtility(double betha) {
+		return Math.max(utility(betha) / maxUtility(), -1);
+	}
+	
+	public long playbackEllapsed() {
+		return Duration.between(startTime, LocalDateTime.now()).toMillis();		
+	}	
 
 	private long playbackInterval() {
 		return Duration.between(startTime, endTime).toMillis();
 	}
-
+	
 	private long servingInterval() {
 		return Duration.between(requestingTime, receivingTime).toMillis();		
 	}

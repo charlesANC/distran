@@ -1,6 +1,7 @@
 package br.unb.cic.comnet.distran.agents.broker;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import br.unb.cic.comnet.distran.player.Segment;
@@ -16,5 +17,8 @@ public abstract class Broker extends Agent {
 	public abstract List<Segment> getNonAssignedSegments();
 	
 	public abstract void addTranscoders(Set<AID> newTranscoders);
-	public abstract Set<AID> getTranscoders();
+	public abstract Set<TranscoderInfo> getTranscoders();
+	
+	public abstract void addTranscoderRating(UtilityFeedback feedback);
+	public abstract Map<String, Set<UtilityFeedback>> getFeedbacks();
 }

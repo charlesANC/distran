@@ -1,5 +1,6 @@
 package br.unb.cic.comnet.distran.agents.viewer;
 
+import br.unb.cic.comnet.distran.agents.GeneralParameters;
 import br.unb.cic.comnet.distran.agents.MessageProtocols;
 import br.unb.cic.comnet.distran.player.Player;
 import br.unb.cic.comnet.distran.player.RequestingSegmentListener;
@@ -26,7 +27,7 @@ public class SequentialPlayViewer extends Viewer {
 	public SequentialPlayViewer() {
 		super();
 		
-		player = new Player(5);
+		player = new Player(GeneralParameters.getBufferLength());
 		player.addRequestingListener(new RequestSegment(this));
 	}
 
@@ -36,10 +37,10 @@ public class SequentialPlayViewer extends Viewer {
 		
 		addBehaviour(new BrokerSearchBehaviour(this, 1000));
 
-		addBehaviour(new PlayerTickBehaviour(this, 2000));
+		addBehaviour(new PlayerTickBehaviour(this, GeneralParameters.getDuration()));
 		addBehaviour(new ReceivingSegmentBehaviour(100, 200));
 		
-		addBehaviour(new PlaylistRequestingBehaviour(this, 2000));
+		addBehaviour(new PlaylistRequestingBehaviour(this, GeneralParameters.getDuration()));
 		addBehaviour(new PlaylistProcessorBehaviour(100, 200));		
 	}
 	

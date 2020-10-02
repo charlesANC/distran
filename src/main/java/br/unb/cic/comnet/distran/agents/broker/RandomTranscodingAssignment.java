@@ -1,9 +1,9 @@
 package br.unb.cic.comnet.distran.agents.broker;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import br.unb.cic.comnet.distran.agents.MessageProtocols;
 import br.unb.cic.comnet.distran.player.Segment;
@@ -40,7 +40,10 @@ public class RandomTranscodingAssignment extends BrokerTickerBehaviour {
 	}
 	
 	private Optional<AID> getRandomTranscoder() {
-		List<AID> transcoders =  new ArrayList<AID>(getAgent().getTranscoders());
+		List<AID> transcoders =  
+				getAgent().getTranscoders().stream()
+					.map(x -> x.getAID())
+					.collect(Collectors.toList());
 		
 		if (transcoders.isEmpty()) return Optional.empty();
 			

@@ -2,6 +2,7 @@ package br.unb.cic.comnet.distran.agents.transcoder;
 
 import java.util.Random;
 
+import br.unb.cic.comnet.distran.agents.GeneralParameters;
 import br.unb.cic.comnet.distran.agents.MessageProtocols;
 import br.unb.cic.comnet.distran.player.Segment;
 import jade.lang.acl.ACLMessage;
@@ -27,7 +28,7 @@ public class TranscodeSegmentBehaviour extends TranscoderMsgProcessorBehaviour {
 	public void doAction(ACLMessage msg) {
 		logger.log(Logger.INFO, getAgent().getName() + ": Adding segment " + msg.getContent());
 		
-		Segment segment = Segment.create(msg.getContent(), 2000L, getAgent().getName());
+		Segment segment = Segment.create(msg.getContent(), GeneralParameters.getDuration(), getAgent().getName());
 		segment.setLength(500*1024 + 500 * Long.valueOf(new Random().nextInt(1024)));
 		
 		getAgent().addSegment(segment);
