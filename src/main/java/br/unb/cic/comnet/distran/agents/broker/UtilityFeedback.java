@@ -10,6 +10,8 @@ public class UtilityFeedback implements Serializable, Comparable<UtilityFeedback
 	private String segmentId;
 	private String provider;
 	private Double utility;
+	private Double maxUtility;
+	private Double standardUtility;
 	private LocalDateTime timestamp;
 	
 	public UtilityFeedback(
@@ -17,12 +19,16 @@ public class UtilityFeedback implements Serializable, Comparable<UtilityFeedback
 			String id,
 			String provider,
 			Double utility,
+			Double maxUtility,
+			Double standardUtility,
 			LocalDateTime timestamp
 	) {
 		this.evaluator = evaluator;
 		this.segmentId = id;
 		this.provider = provider;
 		this.utility = utility;
+		this.maxUtility = maxUtility;
+		this.standardUtility = standardUtility;
 		this.timestamp = timestamp;
 	}
 	
@@ -56,6 +62,20 @@ public class UtilityFeedback implements Serializable, Comparable<UtilityFeedback
 		this.utility = utility;
 	}
 	
+	public Double getMaxUtility() {
+		return maxUtility;
+	}
+	public void setMaxUtility(Double maxUtility) {
+		this.maxUtility = maxUtility;
+	}
+
+	public Double getStandardUtility() {
+		return standardUtility;
+	}
+	public void setStandardUtility(Double standardUtility) {
+		this.standardUtility = standardUtility;
+	}
+
 	public LocalDateTime getTimestamp() {
 		return timestamp;
 	}

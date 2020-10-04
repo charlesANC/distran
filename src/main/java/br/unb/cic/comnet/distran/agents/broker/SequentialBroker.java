@@ -1,8 +1,5 @@
 package br.unb.cic.comnet.distran.agents.broker;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
 import java.security.InvalidParameterException;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -46,10 +43,15 @@ public class SequentialBroker extends Broker {
 		
 		addBehaviour(new TranscoderSearcher(this, 10000));
 		addBehaviour(new SegmentGenerator(this, GeneralParameters.getDuration()));
-		addBehaviour(new RandomTranscodingAssignment(this, 1000));
 		addBehaviour(new PlaylistProviderBehaviour(100, 200));
 		addBehaviour(new EvaluateTranscodersBehaviour(this, 4000));
 		addBehaviour(new PrintUtilityBehaviour(this, 12000));
+		
+		if (getArguments().length == 0 || !getArguments()[0].toString().equals("T")) {
+			addBehaviour(new RandomTranscodingAssignment(this, 1000));
+		} else {
+			addBehaviour(new DirectTrustTranscodingAssignment(this, 1000));			
+		}
 		
 		publishMe();		
 	}

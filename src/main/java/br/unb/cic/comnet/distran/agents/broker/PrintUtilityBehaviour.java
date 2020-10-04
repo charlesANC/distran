@@ -33,14 +33,18 @@ public class PrintUtilityBehaviour extends BrokerTickerBehaviour {
 						getAgent().getFeedbacks().get(segment).stream()
 							.collect(Collectors.summingDouble(UtilityFeedback::getUtility));
 				
+				Double maxUtility = 
+						getAgent().getFeedbacks().get(segment).stream()
+							.collect(Collectors.summingDouble(UtilityFeedback::getMaxUtility));				
+				
 				// Por enquanto a utilidade dos transcoders é sempre a soma da utilidade dos viewers
 				// Na experiência em ambiente real, vai ter viewer que não vai obter utilidade de 
 				// nenhum transcoder, então a utilidade pode ser diferente.
-				Double transcodersUtility = viewersUtility;
+				Double transcodersUtility = GeneralParameters.getAlpha() * viewersUtility;
 				
 				Double totalUtility = viewersUtility + GeneralParameters.getAlpha() * transcodersUtility;
 				
-				writer.write(String.format("%s;%.2f;%.2f;%.2f\r\n", segment, viewersUtility, transcodersUtility, totalUtility));
+				writer.write(String.format("%s;%.2f;%.2f;%.2f;%.2f\r\n", segment, maxUtility, viewersUtility, transcodersUtility, totalUtility));
 			}			
 		} catch (IOException e) {
 			e.printStackTrace();

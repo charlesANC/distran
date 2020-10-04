@@ -29,7 +29,7 @@ public class TranscodeSegmentBehaviour extends TranscoderMsgProcessorBehaviour {
 		logger.log(Logger.INFO, getAgent().getName() + ": Adding segment " + msg.getContent());
 		
 		Segment segment = Segment.create(msg.getContent(), GeneralParameters.getDuration(), getAgent().getName());
-		segment.setLength(500*1024 + 500 * Long.valueOf(new Random().nextInt(1024)));
+		segment.setLength(500*1024 + 500 * Long.valueOf(new Random(250675).nextInt(1024)));
 		
 		getAgent().addSegment(segment);
 		

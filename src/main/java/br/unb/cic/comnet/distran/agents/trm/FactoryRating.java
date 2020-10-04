@@ -13,8 +13,8 @@ public class FactoryRating {
 		return new Rating(
 					feedback.getProvider(),
 					feedback.getEvaluator(),
-					feedback.getUtility(),
-					feedback.getUtility(),
+					feedback.getStandardUtility(),
+					feedback.getStandardUtility(),
 					calculateIteration(feedback.getSegmentId()),
 					"Transcoding",
 					convert(feedback.getTimestamp())

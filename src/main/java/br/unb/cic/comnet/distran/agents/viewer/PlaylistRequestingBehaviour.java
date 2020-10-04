@@ -39,6 +39,8 @@ public class PlaylistRequestingBehaviour extends ViewerTickerBehaviour {
 								getAgent().getAID().getName(),
 								x.getId(), 
 								x.getSource(), 
+								x.utility(GeneralParameters.getBetha()),
+								x.maxUtility(),
 								x.standardUtility(GeneralParameters.getBetha()), 
 								x.getEndTime()
 							)
