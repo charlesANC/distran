@@ -2,6 +2,7 @@ package br.unb.cic.comnet.distran.agents.broker;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import br.unb.cic.comnet.distran.player.Segment;
@@ -13,6 +14,8 @@ public abstract class Broker extends Agent {
 
 	public abstract boolean hasNoSegments();
 	public abstract void addSegment(Segment segment);
+	public abstract Optional<Segment> getSegment(String segmentId);
+	public abstract long segmentCount();
 	public abstract List<Segment> getPlaylist();
 	public abstract List<Segment> getNonAssignedSegments();
 	

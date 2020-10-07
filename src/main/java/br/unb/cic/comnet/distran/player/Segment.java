@@ -39,7 +39,9 @@ public class Segment implements Serializable, Comparable<Segment> {
 	}
 	
 	public Long getLength() {
-		return length;
+		// FIXME: Retirar essa linha abaixo
+		//return length;
+		return 1024*1024L;
 	}
 	public void setLength(Long length) {
 		this.length = length;
@@ -58,6 +60,6 @@ public class Segment implements Serializable, Comparable<Segment> {
 	@Override
 	public int compareTo(Segment o) {
 		if (o == null) return 1;
-		return getId().compareTo(o.getId());
+		return Integer.valueOf(getId()).compareTo(Integer.valueOf(o.getId()));
 	}
 }

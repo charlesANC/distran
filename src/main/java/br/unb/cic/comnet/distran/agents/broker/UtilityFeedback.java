@@ -9,6 +9,7 @@ public class UtilityFeedback implements Serializable, Comparable<UtilityFeedback
 	private String evaluator;
 	private String segmentId;
 	private String provider;
+	private Long playInterval;
 	private Double utility;
 	private Double maxUtility;
 	private Double standardUtility;
@@ -18,6 +19,7 @@ public class UtilityFeedback implements Serializable, Comparable<UtilityFeedback
 			String evaluator,
 			String id,
 			String provider,
+			Long playInterval,
 			Double utility,
 			Double maxUtility,
 			Double standardUtility,
@@ -26,6 +28,7 @@ public class UtilityFeedback implements Serializable, Comparable<UtilityFeedback
 		this.evaluator = evaluator;
 		this.segmentId = id;
 		this.provider = provider;
+		this.playInterval = playInterval;
 		this.utility = utility;
 		this.maxUtility = maxUtility;
 		this.standardUtility = standardUtility;
@@ -55,6 +58,13 @@ public class UtilityFeedback implements Serializable, Comparable<UtilityFeedback
 		this.provider = provider;
 	}
 	
+	public Long getPlayInterval() {
+		return playInterval;
+	}
+	public void setPlayInterval(Long playInterval) {
+		this.playInterval = playInterval;
+	}
+
 	public Double getUtility() {
 		return utility;
 	}

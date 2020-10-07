@@ -12,6 +12,7 @@ public class SegmentInfo implements Serializable, Comparable<SegmentInfo> {
 	private boolean empty;
 	private long length;
 	private long duration;
+	private int success;
 	
 	private LocalDateTime requestingTime;
 	private LocalDateTime receivingTime;
@@ -43,6 +44,13 @@ public class SegmentInfo implements Serializable, Comparable<SegmentInfo> {
 
 	public long getDuration() {
 		return duration;
+	}
+	
+	public int getSuccess() {
+		return success;
+	}
+	public void setSuccess(int success) {
+		this.success = success;
 	}
 
 	public LocalDateTime getRequestingTime() {
@@ -79,6 +87,7 @@ public class SegmentInfo implements Serializable, Comparable<SegmentInfo> {
 		this.duration = duration;
 		this.source = source;
 		this.empty = true;
+		this.success = 0;
 	}
 	
 	public void signRequested() {
@@ -100,7 +109,7 @@ public class SegmentInfo implements Serializable, Comparable<SegmentInfo> {
 	}
 	
 	public double utility(double betha) {
-		return (length + betha * (duration - playbackInterval())) / duration;
+		return ((length * success) + betha * ((duration * success) - playbackInterval())) / duration;
 	}
 	
 	public double maxUtility() {
@@ -108,14 +117,14 @@ public class SegmentInfo implements Serializable, Comparable<SegmentInfo> {
 	}
 	
 	public double standardUtility(double betha) {
-		return Math.max(utility(betha) / maxUtility(), -1);
+		return Math.max(utility(betha) / maxUtility(), -2);
 	}
 	
 	public long playbackEllapsed() {
 		return Duration.between(startTime, LocalDateTime.now()).toMillis();		
 	}	
 
-	private long playbackInterval() {
+	public long playbackInterval() {
 		return Duration.between(startTime, endTime).toMillis();
 	}
 	
@@ -126,7 +135,7 @@ public class SegmentInfo implements Serializable, Comparable<SegmentInfo> {
 	@Override
 	public int compareTo(SegmentInfo o) {
 		if (o == null) return 1;
-		return getId().compareTo(o.getId());
+		return Integer.valueOf(getId()).compareTo(Integer.valueOf(o.getId()));
 	}
 	
 	@Override

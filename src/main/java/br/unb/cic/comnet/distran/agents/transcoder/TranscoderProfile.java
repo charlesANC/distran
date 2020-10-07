@@ -2,7 +2,10 @@ package br.unb.cic.comnet.distran.agents.transcoder;
 
 public enum TranscoderProfile {
 	
-	A(1000, 2000, 100, 300), B(2000, 3000, 300, 600), C(5000, 8000, 600, 1000);
+	A(210, 290, 300, 500), 
+	B(400, 600, 300, 500), 
+	C(750, 1250, 300, 500), 
+	D(1000, 2000, 1000, 2000);
 	
 	private Integer lowerServingTime;
 	private Integer higherServingTime;

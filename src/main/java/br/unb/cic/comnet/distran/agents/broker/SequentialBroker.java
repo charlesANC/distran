@@ -4,6 +4,7 @@ import java.security.InvalidParameterException;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -12,7 +13,6 @@ import java.util.stream.Collectors;
 
 import br.unb.cic.comnet.distran.agents.GeneralParameters;
 import br.unb.cic.comnet.distran.agents.services.BrokerageServiceDescriptor;
-import br.unb.cic.comnet.distran.agents.trm.FactoryRating;
 import br.unb.cic.comnet.distran.player.Segment;
 import jade.core.AID;
 import jade.domain.DFService;
@@ -48,9 +48,9 @@ public class SequentialBroker extends Broker {
 		addBehaviour(new PrintUtilityBehaviour(this, 12000));
 		
 		if (getArguments().length == 0 || !getArguments()[0].toString().equals("T")) {
-			addBehaviour(new RandomTranscodingAssignment(this, 1000));
+			addBehaviour(new RandomTranscodingAssignment(this, 2000));
 		} else {
-			addBehaviour(new DirectTrustTranscodingAssignment(this, 1000));			
+			addBehaviour(new DirectTrustTranscodingAssignment(this, 2000));			
 		}
 		
 		publishMe();		
@@ -67,6 +67,11 @@ public class SequentialBroker extends Broker {
 	}
 	
 	@Override
+	public long segmentCount() {
+		return segments.size();
+	}
+	
+	@Override
 	public List<Segment> getPlaylist() {
 		return segments.stream()
 				.filter(Segment::hasSource)
@@ -78,17 +83,45 @@ public class SequentialBroker extends Broker {
 	public List<Segment> getNonAssignedSegments() {
 		return segments.stream()
 				.filter(x->{return !x.hasSource();})
+				.sorted()
 				.collect(Collectors.toList());
 	}
 	
 	@Override
 	public void addTranscoders(Set<AID> newTranscoders) {
-		newTranscoders.stream().forEach(aid -> transcoders.put(aid, new TranscoderInfo(aid)));
+		newTranscoders.stream().forEach(aid -> transcoders.putIfAbsent(aid, new TranscoderInfo(aid)));
 	}
 	
 	@Override
 	public Set<TranscoderInfo> getTranscoders() {
 		return new TreeSet<TranscoderInfo>(transcoders.values());
+	}	
+	
+	@Override
+	public void addTranscoderRating(UtilityFeedback feedback) {
+		addSegmentFeedback(feedback);
+		
+		AID aid = new AID(feedback.getProvider(), true);
+		if (transcoders.containsKey(aid)) {
+			transcoders.get(aid).addRating(feedback);
+		} else {
+			throw new InvalidParameterException("I does not have a transcoder named " + feedback.getProvider());			
+		}
+	}
+	
+	@Override
+	public Map<String, Set<UtilityFeedback>> getFeedbacks() {
+		return feedbacks;
+	}
+
+	@Override
+	public Optional<Segment> getSegment(String segmentId) {
+		for(Segment seg : segments) {
+			if (seg.getId().equals(segmentId)) {
+				return Optional.of(seg);
+			}
+		}
+		return Optional.empty();
 	}	
 	
 	private void publishMe() {
@@ -104,28 +137,10 @@ public class SequentialBroker extends Broker {
 		}
 	}
 
-	@Override
-	public void addTranscoderRating(UtilityFeedback feedback) {
-		addSegmentFeedback(feedback);
-		
-		AID aid = new AID(feedback.getProvider(), true);
-		if (transcoders.containsKey(aid)) {
-			TranscoderInfo transinfo = transcoders.get(aid);
-			transinfo.addRating(FactoryRating.create(feedback));
-		} else {
-			throw new InvalidParameterException("I does not have a transcoder named " + feedback.getProvider());			
-		}
-	}
-	
 	private void addSegmentFeedback(UtilityFeedback feedback) {
 		if (!feedbacks.containsKey(feedback.getSegmentId())) {
 			feedbacks.put(feedback.getSegmentId(), new TreeSet<UtilityFeedback>());
 		}
 		feedbacks.get(feedback.getSegmentId()).add(feedback);
-	}
-	
-	@Override
-	public Map<String, Set<UtilityFeedback>> getFeedbacks() {
-		return feedbacks;
 	}
 }

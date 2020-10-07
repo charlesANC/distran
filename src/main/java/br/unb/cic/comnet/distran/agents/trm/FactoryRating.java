@@ -25,7 +25,7 @@ public class FactoryRating {
 		// FIXME: O modelo do tiago está acoplado a simulação episódica que ele construiu
 		// antes de usar esse modelo para simulação utilizando reputação temos de 
 		// eliminar essa dependência, além de usar LocalDateTime ao invés de Date
-		return Integer.valueOf(segmentId.substring(1));
+		return Integer.valueOf(segmentId);
 	}
 	
 	private static Date convert(LocalDateTime time) {

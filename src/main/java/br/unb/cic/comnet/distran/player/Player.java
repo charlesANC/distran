@@ -18,8 +18,16 @@ public class Player {
 	private Map<String, SegmentInfo> segmentsInfo;
 	private Queue<SegmentInfo> buffer;
 	private int bufferSize;
+	private boolean play = false;
 	
 	private List<RequestingSegmentListener> requestingListeners;
+	
+	public boolean canPlay() {
+		if (!play) {
+			play = !buffer.peek().isEmpty();
+		}
+		return play;
+	}
 	
 	public Set<SegmentInfo> getPlayedSegments() {
 		return segmentsInfo.values().stream()
@@ -73,19 +81,49 @@ public class Player {
 	public void playStep() {
 		updateBuffer();
 		
-		if (buffer.isEmpty()) return;
+		if (buffer.isEmpty() || !canPlay()) return;
 		
 		SegmentInfo head = buffer.peek();
 		
+		if (head.isPlaying() && head.isEmpty()) {
+			if (head.playbackEllapsed() > head.getDuration() * 3) {
+				head = stopPlay(head, 0);
+			}
+		}
+		
 		if (head.isPlaying() && !head.isEmpty()) {
-			head.signEndPlayback();
-			buffer.remove(head);
-			head = buffer.peek();
+			head = stopPlay(head, 1);
 		} 
 		
 		if (head != null && !head.isPlaying()) {
-			head.signStartPlayback();			
+			startPlay(head);			
+		}		
+	}
+	
+	public void updateSegmentsSource(List<Segment> playlist) {
+		for(Segment seg : playlist) {
+			if (segmentsInfo.containsKey(seg.getId())) {
+				SegmentInfo oldSeg = segmentsInfo.get(seg.getId());
+				if (oldSeg.isEmpty()) {
+					oldSeg.setSource(seg.getSource());
+				}
+			} else {
+				SegmentInfo newSeg = new SegmentInfo(seg.getId(), seg.getDuration(), seg.getSource());
+				segmentsInfo.put(newSeg.getId(), newSeg);
+			}
 		}
+	}	
+
+	private void startPlay(SegmentInfo head) {
+		head.signStartPlayback();
+	}
+
+	private SegmentInfo stopPlay(SegmentInfo head, int success) {
+		head.signEndPlayback();
+		head.setSuccess(success);
+		buffer.remove(head);
+		head = buffer.peek();
+		return head;
 	}
 
 	private void updateBuffer() {
@@ -104,20 +142,6 @@ public class Player {
 		
 		for(RequestingSegmentListener listener : requestingListeners) {
 			listener.requesting(seg);
-		}
-	}
-	
-	public void updateSegmentsSource(List<Segment> playlist) {
-		for(Segment seg : playlist) {
-			if (segmentsInfo.containsKey(seg.getId())) {
-				SegmentInfo oldSeg = segmentsInfo.get(seg.getId());
-				if (oldSeg.isEmpty()) {
-					oldSeg.setSource(seg.getSource());
-				}
-			} else {
-				SegmentInfo newSeg = new SegmentInfo(seg.getId(), seg.getDuration(), seg.getSource());
-				segmentsInfo.put(newSeg.getId(), newSeg);
-			}
 		}
 	}
 }
