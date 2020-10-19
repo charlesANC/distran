@@ -44,7 +44,7 @@ public class DirectTrustTranscodingAssignment extends BrokerTickerBehaviour {
 	}
 	
 	private Optional<AID> drawATranscoder(boolean useTrust) {
-		return useTrust? drawUsingTrust() : drawRandomly();
+		return useTrust ? drawUsingTrust() : drawRandomly();
 	}
 	
 	private Optional<AID> drawUsingTrust() {

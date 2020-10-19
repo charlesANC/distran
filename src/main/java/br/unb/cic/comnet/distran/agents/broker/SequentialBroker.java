@@ -53,7 +53,7 @@ public class SequentialBroker extends Broker {
 			addBehaviour(new DirectTrustTranscodingAssignment(this, 2000));			
 		}
 		
-		publishMe();		
+		publishMe();
 	}
 	
 	@Override
