@@ -1,6 +1,7 @@
 package br.unb.cic.comnet.distran.player;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 public class Segment implements Serializable, Comparable<Segment> {
 	private static final long serialVersionUID = 1L;
@@ -14,12 +15,14 @@ public class Segment implements Serializable, Comparable<Segment> {
 		seg.setId(id);
 		seg.setDuration(duration);
 		seg.setSource(source);
+		seg.setCreationTime(LocalDateTime.now());
 		return seg;
 	}
 	
 	private String id;
 	private Long duration;
 	private Long length;
+	private LocalDateTime creationTime;	
 	private String source;	
 	
 	public Segment() {}
@@ -46,6 +49,13 @@ public class Segment implements Serializable, Comparable<Segment> {
 	public void setLength(Long length) {
 		this.length = length;
 	}	
+	
+	public LocalDateTime getCreationTime() {
+		return creationTime;
+	}
+	public void setCreationTime(LocalDateTime creationTime) {
+		this.creationTime = creationTime;
+	}
 
 	public String getSource() {
 		return source;

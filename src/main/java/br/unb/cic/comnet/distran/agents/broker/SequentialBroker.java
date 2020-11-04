@@ -1,6 +1,7 @@
 package br.unb.cic.comnet.distran.agents.broker;
 
 import java.security.InvalidParameterException;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -73,10 +74,19 @@ public class SequentialBroker extends Broker {
 	
 	@Override
 	public List<Segment> getPlaylist() {
-		return segments.stream()
-				.filter(Segment::hasSource)
-				.sorted()
-				.collect(Collectors.toList());
+		List<Segment> hasSource = 
+				segments.stream()
+					.filter(Segment::hasSource)
+					.sorted()					
+					.collect(Collectors.toList());
+		
+		if (hasSource.size() >= GeneralParameters.getWindowLength()) {
+			return hasSource.subList(
+						hasSource.size() - GeneralParameters.getWindowLength(), 
+						hasSource.size() - 1);
+		}
+		
+		return Collections.<Segment>emptyList();
 	}
 	
 	@Override

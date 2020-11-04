@@ -36,7 +36,8 @@ public class ViewersPopulationController extends Agent {
 		this.viewers = new ArrayList<AgentController>();
 		this.viewersCounter = 0;
 		
-		setDistribution(new PiramidalDistribution(1, 10));
+		//setDistribution(new PiramidalDistribution(1, 10));
+		setDistribution(new ParetosDistribution(500, 1, 0.7, 0.1));
 	}
 	
 	@Override
@@ -48,6 +49,9 @@ public class ViewersPopulationController extends Agent {
 			protected void onTick() {
 				try {
 					int numberOfAgents = getDistribution().position(turn);
+					
+					logger.log(Logger.INFO, "New number: " + numberOfAgents);
+					
 					if (numberOfAgents > viewers.size()) {
 						for(int i = viewers.size(); i < numberOfAgents; i++) {
 							createViewer();

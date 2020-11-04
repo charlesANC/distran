@@ -7,6 +7,7 @@ public class GeneralParameters {
 	private static final Double ALPHA = 1D;
 	private static final Integer BUFFER_LENGTH = 3;
 	private static final Double TRUST_THRESHOLD = 0.75;
+	private static final Integer WINDOW_LENGTH = 15;
 	
 	public static Long getDuration() {
 		return DURATION;
@@ -26,5 +27,9 @@ public class GeneralParameters {
 
 	public static Double getTrustThreshold() {
 		return TRUST_THRESHOLD;
+	}
+
+	public static int getWindowLength() {
+		return WINDOW_LENGTH;
 	}
 }

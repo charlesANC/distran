@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import br.unb.cic.comnet.distran.agents.GeneralParameters;
@@ -27,11 +29,48 @@ public class PrintUtilityBehaviour extends BrokerTickerBehaviour {
 	protected void onTick() {
 		logger.log(Logger.INFO, "Writing out utility...");
 		
-		printFeedbacks("c:\\temp\\util_" + System.currentTimeMillis() + "_.txt");
+		printUtility("c:\\temp\\util_" + System.currentTimeMillis() + "_.txt");
+		printFeedbacks("c:\\temp\\feedback_" + System.currentTimeMillis() + "_.txt");
 		appendTranscodersInfo("c:\\temp\\transcoders_.txt");
 	}
 	
 	private void printFeedbacks(String fileName) {
+		DateTimeFormatter formater = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
+		
+		try (Writer writer = new FileWriter(fileName)) {
+			List<String> segmentsIds = 
+					getAgent().getFeedbacks().keySet().stream()
+						.sorted((x,y) -> Integer.valueOf(x).compareTo(Integer.valueOf(y)))
+						.collect(Collectors.toList());
+			
+			for(String segmentId : segmentsIds) {
+				Segment segment = getAgent().getSegment(segmentId).get();
+				
+				List<UtilityFeedback> feedbacks = 
+						getAgent().getFeedbacks().get(segmentId).stream()
+							.sorted((x, y) -> x.getRequestTime().compareTo(y.getRequestTime()))
+							.collect(Collectors.toList());
+				
+				for(UtilityFeedback feedback : feedbacks) {
+					writer.write(String.format("%s;%s;%s;%s;%s;%s;%d;%.04f\r\n", 
+							segmentId, 
+							feedback.getEvaluator(),
+							feedback.getProvider(),
+							formater.format(segment.getCreationTime()),
+							formater.format(feedback.getRequestTime()),
+							formater.format(feedback.getPlayTime()),
+							feedback.getPlayInterval(),
+							feedback.getStandardUtility()
+					));
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			logger.log(Logger.WARNING, "Can not write out feedbacks!");
+		}
+	}
+	
+	private void printUtility(String fileName) {
 		
 		try (Writer writer = new FileWriter(fileName)) {
 			for(String segment : getAgent().getFeedbacks().keySet().stream().sorted().collect(Collectors.toSet())) {
