@@ -1,5 +1,7 @@
 package br.unb.cic.comnet.distran.agents.viewer;
 
+import java.security.InvalidParameterException;
+
 import br.unb.cic.comnet.distran.agents.GeneralParameters;
 import br.unb.cic.comnet.distran.agents.MessageProtocols;
 import br.unb.cic.comnet.distran.player.Player;
@@ -14,10 +16,19 @@ public class SequentialPlayViewer extends Viewer {
 	private static final long serialVersionUID = 1L;
 	
 	private Logger logger = Logger.getJADELogger(getClass().getName());
-	
 	private Player player;
-	
 	private AID broker;
+	
+	public ViewerProfile getProfile() {
+		if (getArguments() == null || getArguments().length == 0) {
+			return ViewerProfile.A;
+		}
+		ViewerProfile profile = ViewerProfile.valueOf(getArguments()[0].toString());
+		if (profile == null) {
+			throw new InvalidParameterException(getArguments()[0] + " is not a valid transcoder profile.");			
+		}
+		return profile;
+	}	
 	
 	@Override
 	public Player getPlayer() {
@@ -38,10 +49,13 @@ public class SequentialPlayViewer extends Viewer {
 		addBehaviour(new BrokerSearchBehaviour(this, 1000));
 
 		addBehaviour(new PlayerTickBehaviour(this, GeneralParameters.getDuration()));
-		addBehaviour(new ReceivingSegmentBehaviour(100, 200));
+		
+		ViewerProfile profile = getProfile();
+		
+		addBehaviour(new ReceivingSegmentBehaviour(profile.getLowerReceivingTime(), profile.getHigherReceivingTime()));
 		
 		addBehaviour(new PlaylistRequestingBehaviour(this, GeneralParameters.getDuration()));
-		addBehaviour(new PlaylistProcessorBehaviour(100, 200));		
+		addBehaviour(new PlaylistProcessorBehaviour(profile.getLowerReceivingTime(), profile.getHigherReceivingTime()));		
 	}
 	
 	public boolean hasBroker() {

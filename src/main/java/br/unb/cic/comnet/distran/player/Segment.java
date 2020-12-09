@@ -2,6 +2,7 @@ package br.unb.cic.comnet.distran.player;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 public class Segment implements Serializable, Comparable<Segment> {
 	private static final long serialVersionUID = 1L;
@@ -71,5 +72,9 @@ public class Segment implements Serializable, Comparable<Segment> {
 	public int compareTo(Segment o) {
 		if (o == null) return 1;
 		return Integer.valueOf(getId()).compareTo(Integer.valueOf(o.getId()));
+	}
+	
+	public String toString() {
+		return id + "-" + Optional.ofNullable(source).orElse("");
 	}
 }

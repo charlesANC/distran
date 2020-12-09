@@ -43,10 +43,11 @@ public class SequentialBroker extends Broker {
 		logger.log(Logger.INFO, "Starting broker " + getName());
 		
 		addBehaviour(new TranscoderSearcher(this, 10000));
-		addBehaviour(new SegmentGenerator(this, GeneralParameters.getDuration()));
+		//addBehaviour(new SegmentGenerator(this, GeneralParameters.getDuration()));
+		addBehaviour(new SegmentGenerator(this, GeneralParameters.getDuration(), true, 120));		
 		addBehaviour(new PlaylistProviderBehaviour(100, 200));
 		addBehaviour(new EvaluateTranscodersBehaviour(this, 4000));
-		addBehaviour(new PrintUtilityBehaviour(this, 12000));
+		addBehaviour(new PrintUtilityBehaviour(this, 120000));
 		
 		if (getArguments().length == 0 || !getArguments()[0].toString().equals("T")) {
 			addBehaviour(new RandomTranscodingAssignment(this, 2000));
@@ -81,9 +82,12 @@ public class SequentialBroker extends Broker {
 					.collect(Collectors.toList());
 		
 		if (hasSource.size() >= GeneralParameters.getWindowLength()) {
-			return hasSource.subList(
+			List<Segment> playlist = 
+					hasSource.subList(
 						hasSource.size() - GeneralParameters.getWindowLength(), 
 						hasSource.size() - 1);
+			
+			return playlist;
 		}
 		
 		return Collections.<Segment>emptyList();

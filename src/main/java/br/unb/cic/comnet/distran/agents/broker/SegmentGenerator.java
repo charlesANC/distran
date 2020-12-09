@@ -14,9 +14,18 @@ public class SegmentGenerator extends BrokerTickerBehaviour {
 	private static final long serialVersionUID = 1L;
 	
 	Logger logger = Logger.getJADELogger(getClass().getName());
-
+	
+	private boolean hasLimits;
+	private long maxSegments;
+	
 	public SegmentGenerator(Agent a, long period) {
+		this(a, period, false, 0);
+	}
+
+	public SegmentGenerator(Agent a, long period, boolean hasLimits, long maxSegments) {
 		super(a, period);
+		this.hasLimits = hasLimits;
+		this.maxSegments = maxSegments;
 	}
 
 	@Override
@@ -28,6 +37,10 @@ public class SegmentGenerator extends BrokerTickerBehaviour {
 				getAgent().addSegment(Segment.create(String.valueOf(i), GeneralParameters.getDuration()));					
 			}
 		} else {
+			if (hasLimits && getAgent().segmentCount() >= maxSegments) {
+				return;
+			}
+			
 			String id = "" + getAgent().segmentCount();
 			
 			logMessage("Adding new seg " + id);			

@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import br.unb.cic.comnet.distran.agents.MessageProtocols;
 import br.unb.cic.comnet.distran.player.Segment;
+import br.unb.cic.comnet.distran.util.SerializationHelper;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
@@ -55,7 +56,7 @@ public class RandomTranscodingAssignment extends BrokerTickerBehaviour {
 		ACLMessage msg = new ACLMessage(ACLMessage.PROPOSE);
 		msg.setProtocol(MessageProtocols.transcode.toString());
 		msg.addReceiver(transcoder);
-		msg.setContent(segment.getId());
+		msg.setContent(SerializationHelper.serialize(segment));
 		getAgent().send(msg);
 	}
 }

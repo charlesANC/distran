@@ -41,3 +41,17 @@ build/
 *.mkv
 *.avi
 *.mov
+/distran.uml
+/distran.umlcd
+/distran2.uml
+/distran2_.umlcd
+/distran2_br.unb.cic.comnet.distran.agents.broker.umlcd
+/distran2_br.unb.cic.comnet.distran.agents.populationControllers.umlcd
+/distran2_br.unb.cic.comnet.distran.agents.services.umlcd
+/distran2_br.unb.cic.comnet.distran.agents.transcoder.umlcd
+/distran2_br.unb.cic.comnet.distran.agents.trm.umlcd
+/distran2_br.unb.cic.comnet.distran.agents.umlcd
+/distran2_br.unb.cic.comnet.distran.agents.viewer.umlcd
+/distran2_br.unb.cic.comnet.distran.behaviours.umlcd
+/distran2_br.unb.cic.comnet.distran.player.umlcd
+/distran2_br.unb.cic.comnet.distran.util.umlcd
