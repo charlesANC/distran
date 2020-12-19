@@ -24,11 +24,13 @@
 	    <artifactId>gson</artifactId>
 	    <version>2.8.6</version>
 	</dependency>	
-	
+	<!-- 
     <dependency>
       <groupId>br.com.tm</groupId>
       <artifactId>repfogagent</artifactId>
       <version>0.0.1-SNAPSHOT</version>
-    </dependency>	
+    </dependency>
+     -->
+     	
   </dependencies>
 </project>
