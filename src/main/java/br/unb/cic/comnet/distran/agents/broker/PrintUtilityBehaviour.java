@@ -29,9 +29,9 @@ public class PrintUtilityBehaviour extends BrokerTickerBehaviour {
 	protected void onTick() {
 		logger.log(Logger.INFO, "Writing out utility...");
 		
-		printUtility("c:\\temp\\util_" + System.currentTimeMillis() + "_.txt");
-		printFeedbacks("c:\\temp\\feedback_" + System.currentTimeMillis() + "_.txt");
-		appendTranscodersInfo("c:\\temp\\transcoders_.txt");
+		printUtility(GeneralParameters.mountOutputFileName("util_" + System.currentTimeMillis() + "_.txt"));
+		printUtility(GeneralParameters.mountOutputFileName("feedback_" + System.currentTimeMillis() + "_.txt"));
+		printUtility(GeneralParameters.mountOutputFileName("transcoders_.txt"));
 	}
 	
 	private void printFeedbacks(String fileName) {

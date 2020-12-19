@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Random;
 
+import br.unb.cic.comnet.distran.agents.GeneralParameters;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
@@ -46,7 +47,7 @@ public abstract class MessageProcessorBehaviour extends CyclicBehaviour {
 	
 	public void logMessage(String msg) {
 		try (
-			 FileWriter fw = new FileWriter("c:\\temp\\t_" + getAgent().getLocalName() + ".txt", true);
+			 FileWriter fw = new FileWriter(GeneralParameters.mountOutputFileName("t_" + getAgent().getLocalName() + ".txt"), true);
 			 BufferedWriter bw = new BufferedWriter(fw);
 			 PrintWriter pw = new PrintWriter(bw)				
 		){

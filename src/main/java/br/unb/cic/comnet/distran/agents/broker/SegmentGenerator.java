@@ -50,7 +50,7 @@ public class SegmentGenerator extends BrokerTickerBehaviour {
 	
 	public void logMessage(String msg) {
 		try (
-			 FileWriter fw = new FileWriter("c:\\temp\\t_" + getAgent().getLocalName() + ".txt", true);
+			 FileWriter fw = new FileWriter(GeneralParameters.mountOutputFileName("t_" + getAgent().getLocalName() + ".txt"), true);
 			 BufferedWriter bw = new BufferedWriter(fw);
 			 PrintWriter pw = new PrintWriter(bw)				
 		){

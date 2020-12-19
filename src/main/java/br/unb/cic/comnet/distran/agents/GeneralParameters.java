@@ -1,5 +1,9 @@
 package br.unb.cic.comnet.distran.agents;
 
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 public class GeneralParameters {
 	
 	private static final Long DURATION = 2000L;
@@ -31,5 +35,11 @@ public class GeneralParameters {
 
 	public static int getWindowLength() {
 		return WINDOW_LENGTH;
+	}
+	
+	public static String mountOutputFileName(String fileName) {
+		String dir = System.getProperty("outDir", "c:\\temp\\");
+		File file = new File(dir, fileName);
+		return file.getAbsolutePath();
 	}
 }

@@ -95,7 +95,7 @@ public class ViewersPopulationController extends Agent {
 
 			@Override
 			protected void onTick() {
-				appendPopulationInfo("c:\\temp\\population_.txt");
+				appendPopulationInfo(GeneralParameters.mountOutputFileName("population_.txt"));
 			}
 		});
 	}
