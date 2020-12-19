@@ -6,4 +6,5 @@ It employs trust and reputation models to select transcoders.
 
 # How to run (for Cássio)
 
-For running the experiment reported in the article A2, please run the class RodarDistran.
+For running the experiment reported in the article A2, please run the class RodarDistran. If your machine is not a Windows computer with a "c:\temp" folder where the program could write output files in it, pass the VM parameter "-DoutDir=<your_directory>".
+
