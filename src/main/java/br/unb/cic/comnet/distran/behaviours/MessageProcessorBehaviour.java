@@ -4,7 +4,6 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Random;
 
 import br.unb.cic.comnet.distran.agents.GeneralParameters;
 import jade.core.behaviours.CyclicBehaviour;
@@ -17,14 +16,10 @@ public abstract class MessageProcessorBehaviour extends CyclicBehaviour {
 	
 	private Logger logger = Logger.getJADELogger(getClass().getName());
 	
-	private int low;
-	private int high;
 	private MessageTemplate template;
 		
-	public MessageProcessorBehaviour(int low, int high, MessageTemplate template) {
+	public MessageProcessorBehaviour(MessageTemplate template) {
 		super();
-		this.low = low;
-		this.high = high;
 		this.template = template;
 	}
 
@@ -33,7 +28,7 @@ public abstract class MessageProcessorBehaviour extends CyclicBehaviour {
 		ACLMessage msg = myAgent.receive(template);
 		if (msg != null) {
 			long start = System.currentTimeMillis();
-			customWait(makeInterval());
+			customWait(getInterval());
 			long interval = System.currentTimeMillis() - start;
 			logger.log(Logger.INFO, getAgent().getName() + " waited for " + interval + "ms...");
 			
@@ -44,6 +39,8 @@ public abstract class MessageProcessorBehaviour extends CyclicBehaviour {
 	}
 	
 	public abstract void doAction(ACLMessage msg);
+	
+	public abstract int getInterval();
 	
 	public void logMessage(String msg) {
 		try (
@@ -67,11 +64,5 @@ public abstract class MessageProcessorBehaviour extends CyclicBehaviour {
 				getAgent().doWait(interval);				
 			}
 		} while ((System.currentTimeMillis() - start) < interval);
-	}
-
-	private int makeInterval() {
-		int diff = high - low;
-		if (diff == 0) return low;
-		return low + new Random().nextInt(diff);
 	}
 }

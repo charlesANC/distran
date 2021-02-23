@@ -1,9 +1,9 @@
 package br.unb.cic.comnet.distran.agents.viewer;
 
-import br.unb.cic.comnet.distran.behaviours.MessageProcessorBehaviour;
+import br.unb.cic.comnet.distran.behaviours.RandomWaitingMessageProcessor;
 import jade.lang.acl.MessageTemplate;
 
-public abstract class ViewerMessageProcessorBehaviour extends MessageProcessorBehaviour {
+public abstract class ViewerMessageProcessorBehaviour extends RandomWaitingMessageProcessor {
 	private static final long serialVersionUID = 1L;
 
 	public ViewerMessageProcessorBehaviour(int low, int high, MessageTemplate template) {

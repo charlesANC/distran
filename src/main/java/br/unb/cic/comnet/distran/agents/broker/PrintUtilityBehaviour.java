@@ -30,8 +30,8 @@ public class PrintUtilityBehaviour extends BrokerTickerBehaviour {
 		logger.log(Logger.INFO, "Writing out utility...");
 		
 		printUtility(GeneralParameters.mountOutputFileName("util_" + System.currentTimeMillis() + "_.txt"));
-		printUtility(GeneralParameters.mountOutputFileName("feedback_" + System.currentTimeMillis() + "_.txt"));
-		printUtility(GeneralParameters.mountOutputFileName("transcoders_.txt"));
+		printFeedbacks(GeneralParameters.mountOutputFileName("feedback_" + System.currentTimeMillis() + "_.txt"));
+		appendTranscodersInfo(GeneralParameters.mountOutputFileName("transcoders_.txt"));
 	}
 	
 	private void printFeedbacks(String fileName) {
@@ -109,10 +109,10 @@ public class PrintUtilityBehaviour extends BrokerTickerBehaviour {
 	}
 	
 	private void appendTranscodersInfo(String fileName) {
-		String info = "" + getAgent().getPlaylist().size() + ";";
+		String info = "" + currentSegmentsInterval() + ";";
 		for(TranscoderInfo ti : getAgent().getTranscoders()) {
 			info += String.format("[%s];%d;%.4f;%.4f;%.2f;", 
-					ti.getAID().getName(),
+					ti.getAID().getLocalName(),
 					ti.getRatings().size(),
 					ti.getTrustworthy(), 
 					ti.getReliability(), 
@@ -131,5 +131,11 @@ public class PrintUtilityBehaviour extends BrokerTickerBehaviour {
 			e.printStackTrace();
 			logger.log(Logger.WARNING, "Can not write out transcoders info!");			
 		}
+	}
+	
+	private String currentSegmentsInterval() {
+		if (getAgent().getPlaylist().isEmpty()) return "";
+		return getAgent().getPlaylist().get(0).getId() + "-" + 
+				getAgent().getPlaylist().get(getAgent().getPlaylist().size()-1).getId();
 	}
 }

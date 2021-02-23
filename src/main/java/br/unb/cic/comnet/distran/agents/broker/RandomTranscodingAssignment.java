@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import br.unb.cic.comnet.distran.agents.MessageProtocols;
 import br.unb.cic.comnet.distran.player.Segment;
+import br.unb.cic.comnet.distran.util.RandomService;
 import br.unb.cic.comnet.distran.util.SerializationHelper;
 import jade.core.AID;
 import jade.core.Agent;
@@ -48,8 +49,12 @@ public class RandomTranscodingAssignment extends BrokerTickerBehaviour {
 		
 		if (transcoders.isEmpty()) return Optional.empty();
 			
-		int rand = new Random().nextInt(transcoders.size());
+		int rand = getRandom().nextInt(transcoders.size());
 		return Optional.ofNullable(transcoders.get(rand));
+	}
+
+	private Random getRandom() {
+		return RandomService.getInstance().getClassGenerator(this.getClass());
 	}
 	
 	private void sendAssignmentMessage(Segment segment, AID transcoder) {

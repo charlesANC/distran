@@ -117,7 +117,10 @@ public class SegmentInfo implements Serializable, Comparable<SegmentInfo> {
 	}
 	
 	public double standardUtility(double betha) {
-		return Math.max(utility(betha) / maxUtility(), 0);
+		double max = maxUtility();
+		double min = -5 * max;
+		double standard = (utility(betha) - min) / (max - min);
+		return Math.max(standard, 0D);
 	}
 	
 	public long playbackEllapsed() {

@@ -1,9 +1,9 @@
 package br.unb.cic.comnet.distran.agents.broker;
 
-import br.unb.cic.comnet.distran.behaviours.MessageProcessorBehaviour;
+import br.unb.cic.comnet.distran.behaviours.RandomWaitingMessageProcessor;
 import jade.lang.acl.MessageTemplate;
 
-public abstract class BrokerMessageProcessorBehaviour extends MessageProcessorBehaviour {
+public abstract class BrokerMessageProcessorBehaviour extends RandomWaitingMessageProcessor {
 	private static final long serialVersionUID = 1L;
 
 	public BrokerMessageProcessorBehaviour(int low, int high, MessageTemplate template) {

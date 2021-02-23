@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
 import br.com.tm.repfogagent.trm.FIREtrm;
 import br.com.tm.repfogagent.trm.Rating;
 import br.com.tm.repfogagent.trm.components.CertifiedReputationComponent;
@@ -31,7 +31,7 @@ public class TRMHelper {
 	
 	private Map<String, List<Rating>> ratingsPerProvider;
 	
-	private Map<String, List<String>> superNodesForNodeCache = new HashMap();
+	private Map<String, List<String>> superNodesForNodeCache = new HashMap<>();
 	
 	private static TRMHelper instance;
 	

@@ -8,9 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import br.com.tm.repfogagent.trm.Rating;
-import br.com.tm.repfogagent.util.DateUtil;
 import br.com.tm.repfogagent.util.StatisticUtil;
-import br.com.tm.repfogagent.util.Util;
 
 public class WitnessReputationComponent extends FIREBaseComponent {
 

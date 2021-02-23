@@ -1,10 +1,6 @@
 package br.com.tm.repfogagent.trm.components;
 
-import java.util.Date;
-import java.util.List;
-
 import br.com.tm.repfogagent.trm.Rating;
-import br.com.tm.repfogagent.util.DateUtil;
 
 public class InteractionTrustComponent extends FIREBaseComponent {
 

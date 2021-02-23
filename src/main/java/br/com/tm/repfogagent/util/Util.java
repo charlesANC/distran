@@ -28,7 +28,7 @@ public class Util {
 	}
 	 
 	public static Map<String, Double> sortByValue(Map<String, Double> map) {
-	    List<Entry<String, Double>> list = new LinkedList(map.entrySet());
+	    List<Entry<String, Double>> list = new LinkedList<>(map.entrySet());
 	    Collections.sort(list, new Comparator<Object>() {
 	        @SuppressWarnings("unchecked")
 	        public int compare(Object o1, Object o2) {

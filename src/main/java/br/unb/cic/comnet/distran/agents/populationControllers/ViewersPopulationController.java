@@ -13,6 +13,7 @@ import java.util.Random;
 import br.unb.cic.comnet.distran.agents.GeneralParameters;
 import br.unb.cic.comnet.distran.agents.viewer.SequentialPlayViewer;
 import br.unb.cic.comnet.distran.agents.viewer.ViewerProfile;
+import br.unb.cic.comnet.distran.util.RandomService;
 import jade.core.Agent;
 import jade.core.behaviours.TickerBehaviour;
 import jade.util.Logger;
@@ -45,14 +46,14 @@ public class ViewersPopulationController extends Agent {
 		this.viewers = new ArrayList<AgentController>();
 		this.viewersCounter = 0;
 		
-		//setDistribution(new PiramidalDistribution(2, 120, 240));
-		//setDistribution(new StepDistribution(120, 30, 90));
-		setDistribution(new ParetosDistribution(120, 1, 0.7, 0.1));
+		//setDistribution(new PiramidalDistribution(4, 120, 60));
+		setDistribution(new StepDistribution(30, 10, 230));
+		//setDistribution(new ParetosDistribution(120, 1, 0.7, 0.1));
 	}
 	
 	@Override
 	public void setup() {
-		addBehaviour(new TickerBehaviour(this, GeneralParameters.getDuration() * 2) {
+		addBehaviour(new TickerBehaviour(this, GeneralParameters.getDuration() * 4) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -82,11 +83,15 @@ public class ViewersPopulationController extends Agent {
 
 			private void ramdomlyKillSome(int numberOfAgents) throws StaleProxyException {
 				if (numberOfAgents > 0 && viewers.size() > 0) {
-					int killSome = new Random().nextInt(Math.min(numberOfAgents, viewers.size()));
+					int killSome = getRandom().nextInt(Math.min(numberOfAgents, viewers.size()));
 					while (killSome-- > 0) {
 						killViewer();
 					}
 				}
+			}
+
+			private Random getRandom() {
+				return RandomService.getInstance().getClassGenerator(this.getClass());
 			}
 		});
 		
@@ -125,11 +130,13 @@ public class ViewersPopulationController extends Agent {
 	}
 	
 	private int drawAViewer() {
-		return new Random().nextInt(viewers.size());
+		return getRandom().nextInt(viewers.size());
 	}
 	
 	private String drawAProfile() {
-		int roll = new Random().nextInt(1000);
+		return ViewerProfile.A.name();
+		/*
+		int roll = getRandom().nextInt(1000);
 		if (roll < 333) {
 			return ViewerProfile.A.name();
 		}
@@ -137,6 +144,7 @@ public class ViewersPopulationController extends Agent {
 			return ViewerProfile.B.name();
 		}
 		return ViewerProfile.C.name();
+		*/
 	}
 	
 	private void appendPopulationInfo(String fileName) {
@@ -153,5 +161,9 @@ public class ViewersPopulationController extends Agent {
 			e.printStackTrace();
 			logger.log(Logger.WARNING, "Can not write out transcoders info!");			
 		}
+	}	
+	
+	private Random getRandom() {
+		return RandomService.getInstance().getClassGenerator(this.getClass());
 	}	
 }

@@ -8,9 +8,11 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import br.com.tm.repfogagent.trm.components.InteractionTrustComponent;
 import br.unb.cic.comnet.distran.agents.GeneralParameters;
 import br.unb.cic.comnet.distran.agents.MessageProtocols;
 import br.unb.cic.comnet.distran.player.Segment;
+import br.unb.cic.comnet.distran.util.RandomService;
 import br.unb.cic.comnet.distran.util.SerializationHelper;
 import jade.core.AID;
 import jade.core.Agent;
@@ -28,8 +30,10 @@ public class DirectTrustTranscodingAssignment extends BrokerTickerBehaviour {
 
 	@Override
 	protected void onTick() {
+		evaluateTranscoders();
+		
 		getAgent().getNonAssignedSegments().stream().forEach(seg -> {
-			Optional<AID> opTranscoder = drawATranscoder(getAgent().getPlaylist().size() > 19);
+			Optional<AID> opTranscoder = drawATranscoder(getAgent().segmentCount() > 29);
 			
 			if (opTranscoder.isPresent()) {
 				AID aid = opTranscoder.get();
@@ -58,7 +62,7 @@ public class DirectTrustTranscodingAssignment extends BrokerTickerBehaviour {
 		if (tis.isEmpty()) return null;
 		
 		Map<TranscoderInfo, List<Long>> ranges = calculateRanges(tis, 100);
-		int move = new Random().nextInt(100);
+		int move = getRandom().nextInt(100);
 		for(TranscoderInfo ti : tis) {
 			if (ranges.get(ti).get(0) <= move && ranges.get(ti).get(1) >= move) {
 				return ti.getAID();
@@ -108,8 +112,30 @@ public class DirectTrustTranscodingAssignment extends BrokerTickerBehaviour {
 		
 		if (transcoders.isEmpty()) return Optional.empty();
 			
-		int rand = new Random().nextInt(transcoders.size());
+		int rand = getRandom().nextInt(transcoders.size());
 		return Optional.ofNullable(transcoders.get(rand));
-	}	
+	}
+	
+	private void evaluateTranscoders() {
+		InteractionTrustComponent directTrust = new InteractionTrustComponent(0, 0);
+		
+		StringBuilder str = new StringBuilder("\r\n---\r\n");
+		
+		for(TranscoderInfo transInfo : getAgent().getTranscoders()) {
+			if (!transInfo.getRatings().isEmpty()) {
+				double trustworthy = directTrust.calculate(transInfo.getRatings(), transInfo.getRatings().size());
+				transInfo.setTrustworthy(trustworthy);
+				transInfo.setReliability(directTrust.reliability(transInfo.getRatings()));
 
+				str.append("Trustworthy of " + transInfo.getAID().getName() + " is " + trustworthy + "\r\n");				
+			}
+		}
+		
+		str.append("\r\n---\r\n");
+		logger.log(Logger.INFO, str.toString());		
+	}
+	
+	private Random getRandom() {
+		return RandomService.getInstance().getClassGenerator(this.getClass());
+	}	
 }

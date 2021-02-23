@@ -9,7 +9,7 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.util.Logger;
 
-public class SegmentProviderBehaviour extends TranscoderRWMsgProcessorBehaviour {
+public class SegmentProviderCyclicWaitingBehaviour extends TranscoderCWMsgProcessorBehaviour {
 	private static final long serialVersionUID = 1L;
 	
 	Logger logger = Logger.getJADELogger(getClass().getName());
@@ -20,8 +20,8 @@ public class SegmentProviderBehaviour extends TranscoderRWMsgProcessorBehaviour 
 				MessageTemplate.MatchProtocol(MessageProtocols.send_segment.toString()));
 	}	
 	
-	public SegmentProviderBehaviour(int low, int high) {
-		super(low, high, setupTemplate());
+	public SegmentProviderCyclicWaitingBehaviour(int[] waitingTimes) {
+		super(waitingTimes, setupTemplate());
 	}
 	
 	@Override

@@ -1,7 +1,6 @@
 package br.unb.cic.comnet.distran.agents.broker;
 
 import java.security.InvalidParameterException;
-import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -43,16 +42,14 @@ public class SequentialBroker extends Broker {
 		logger.log(Logger.INFO, "Starting broker " + getName());
 		
 		addBehaviour(new TranscoderSearcher(this, 10000));
-		//addBehaviour(new SegmentGenerator(this, GeneralParameters.getDuration()));
-		addBehaviour(new SegmentGenerator(this, GeneralParameters.getDuration(), true, 120));		
+		addBehaviour(new SegmentGenerator(this, GeneralParameters.getDuration(), true, 140));		
 		addBehaviour(new PlaylistProviderBehaviour(100, 200));
-		addBehaviour(new EvaluateTranscodersBehaviour(this, 4000));
-		addBehaviour(new PrintUtilityBehaviour(this, 120000));
+		addBehaviour(new PrintUtilityBehaviour(this, 12000));
 		
 		if (getArguments().length == 0 || !getArguments()[0].toString().equals("T")) {
-			addBehaviour(new RandomTranscodingAssignment(this, 2000));
+			addBehaviour(new RandomTranscodingAssignment(this, GeneralParameters.getDuration()));
 		} else {
-			addBehaviour(new DirectTrustTranscodingAssignment(this, 2000));			
+			addBehaviour(new DirectTrustTranscodingAssignment(this, GeneralParameters.getDuration()));			
 		}
 		
 		publishMe();
@@ -81,16 +78,7 @@ public class SequentialBroker extends Broker {
 					.sorted()					
 					.collect(Collectors.toList());
 		
-		if (hasSource.size() >= GeneralParameters.getWindowLength()) {
-			List<Segment> playlist = 
-					hasSource.subList(
-						hasSource.size() - GeneralParameters.getWindowLength(), 
-						hasSource.size() - 1);
-			
-			return playlist;
-		}
-		
-		return Collections.<Segment>emptyList();
+		return hasSource;
 	}
 	
 	@Override

@@ -1,6 +1,6 @@
 package br.unb.cic.comnet.distran.agents.transcoder;
 
-public enum TranscoderProfile {
+public enum TranscoderProfileRandomWaiting {
 	
 	A(210, 290, 300, 500), 
 	B(400, 600, 300, 500), 
@@ -12,7 +12,7 @@ public enum TranscoderProfile {
 	private Integer lowerTranscodingTime;
 	private Integer higherTranscodingTime;
 	
-	private TranscoderProfile(
+	private TranscoderProfileRandomWaiting(
 			Integer lowerServingTime,
 			Integer higherServingTime,
 			Integer lowerTranscodingTime,

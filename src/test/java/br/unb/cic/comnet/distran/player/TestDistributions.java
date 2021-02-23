@@ -1,8 +1,6 @@
 package br.unb.cic.comnet.distran.player;
 
 import br.unb.cic.comnet.distran.agents.populationControllers.DiscreteDistribution;
-import br.unb.cic.comnet.distran.agents.populationControllers.ParetosDistribution;
-import br.unb.cic.comnet.distran.agents.populationControllers.PiramidalDistribution;
 import br.unb.cic.comnet.distran.agents.populationControllers.StepDistribution;
 
 public class TestDistributions {

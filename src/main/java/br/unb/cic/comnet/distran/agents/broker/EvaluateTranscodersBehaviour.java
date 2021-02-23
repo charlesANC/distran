@@ -20,11 +20,13 @@ public class EvaluateTranscodersBehaviour extends BrokerTickerBehaviour {
 		StringBuilder str = new StringBuilder("\r\n---\r\n");
 		
 		for(TranscoderInfo transInfo : getAgent().getTranscoders()) {
-			double trustworthy = directTrust.calculate(transInfo.getRatings(), transInfo.getRatings().size());
-			transInfo.setTrustworthy(trustworthy);
-			transInfo.setReliability(directTrust.reliability(transInfo.getRatings()));
-			
-			str.append("Trustworthy of " + transInfo.getAID().getName() + " is " + trustworthy + "\r\n");
+			if (!transInfo.getRatings().isEmpty()) {
+				double trustworthy = directTrust.calculate(transInfo.getRatings(), transInfo.getRatings().size());
+				transInfo.setTrustworthy(trustworthy);
+				transInfo.setReliability(directTrust.reliability(transInfo.getRatings()));
+
+				str.append("Trustworthy of " + transInfo.getAID().getName() + " is " + trustworthy + "\r\n");				
+			}
 		}
 		
 		str.append("\r\n---\r\n");

@@ -10,7 +10,7 @@ import br.unb.cic.comnet.distran.util.SerializationHelper;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
-public class TranscodeSegmentBehaviour extends TranscoderMsgProcessorBehaviour {
+public class TranscodeSegmentBehaviour extends TranscoderRWMsgProcessorBehaviour {
 	private static final long serialVersionUID = 1L;
 	
 	private static MessageTemplate setupTemplate() {

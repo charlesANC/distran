@@ -12,14 +12,14 @@ import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.util.Logger;
 
-public class RandomTimeTranscoder extends Transcoder {
+public class CyclicTimeTranscoder extends Transcoder {
 	private static final long serialVersionUID = 1L;
 	
 	Logger logger = Logger.getJADELogger(getClass().getName());
 	
 	private Map<String, Segment> segments;
 	
-	public TranscoderProfileRandomWaiting getProfile() {
+	public TranscoderProfileRandomWaiting getTranscodingProfile() {
 		if (getArguments().length == 0) {
 			throw new InvalidParameterException("A agent transcoder needs a profile as argument.");
 		}
@@ -33,14 +33,29 @@ public class RandomTimeTranscoder extends Transcoder {
 		return profile;
 	}
 	
-	protected void setup() {
-		TranscoderProfileRandomWaiting profile = getProfile();
+	public TranscoderProfileCyclicWaiting getServingProfile() {
+		if (getArguments().length == 0) {
+			throw new InvalidParameterException("A agent transcoder needs a profile as argument.");
+		}
 		
-		logger.log(Logger.INFO, "Starting transcoder " + getName() + " with profile " + profile.toString());
+		TranscoderProfileCyclicWaiting profile = TranscoderProfileCyclicWaiting.valueOf(getArguments()[0].toString());
+		
+		if (profile == null) {
+			throw new InvalidParameterException(getArguments()[0] + " is not a valid transcoder profile.");			
+		}
+		
+		return profile;
+	}	
+	
+	protected void setup() {
+		TranscoderProfileRandomWaiting transProfile = getTranscodingProfile();
+		TranscoderProfileCyclicWaiting servProfile = getServingProfile();
+		
+		logger.log(Logger.INFO, "Starting transcoder " + getName() + " with profile " + transProfile.toString());
 		segments = new ConcurrentHashMap<String, Segment>();
 		
-		addBehaviour(new SegmentProviderBehaviour(profile.getLowerServingTime(), profile.getHigherServingTime()));
-		addBehaviour(new TranscodeSegmentBehaviour(profile.getLowerTranscodingTime(), profile.getHigherTranscodingTime()));
+		addBehaviour(new SegmentProviderCyclicWaitingBehaviour(servProfile.getWaitingTimes()));
+		addBehaviour(new TranscodeSegmentBehaviour(transProfile.getLowerTranscodingTime(), transProfile.getHigherTranscodingTime()));
 		
 		publishMe();
 	}
