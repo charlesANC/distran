@@ -8,18 +8,13 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-import br.com.tm.repfogagent.trm.components.InteractionTrustComponent;
 import br.unb.cic.comnet.distran.agents.GeneralParameters;
-import br.unb.cic.comnet.distran.agents.MessageProtocols;
-import br.unb.cic.comnet.distran.player.Segment;
 import br.unb.cic.comnet.distran.util.RandomService;
-import br.unb.cic.comnet.distran.util.SerializationHelper;
 import jade.core.AID;
 import jade.core.Agent;
-import jade.lang.acl.ACLMessage;
 import jade.util.Logger;
 
-public class DirectTrustTranscodingAssignment extends BrokerTickerBehaviour {
+public class DirectTrustTranscodingAssignment extends AbstractTranscodingAssigment {
 	private static final long serialVersionUID = 1L;
 	
 	Logger logger = Logger.getJADELogger(getClass().getName());
@@ -29,34 +24,15 @@ public class DirectTrustTranscodingAssignment extends BrokerTickerBehaviour {
 	}
 
 	@Override
-	protected void onTick() {
-		evaluateTranscoders();
-		
-		getAgent().getNonAssignedSegments().stream().forEach(seg -> {
-			Optional<AID> opTranscoder = drawATranscoder(getAgent().segmentCount() > 29);
-			
-			if (opTranscoder.isPresent()) {
-				AID aid = opTranscoder.get();
-				
-				logger.log(Logger.INFO, "Assigning seg " + seg + " to " + aid);
-				
-				sendAssignmentMessage(seg, aid);
-				seg.setSource(aid.getName());				
-			} else {
-				logger.log(Logger.INFO, "Has no transcoder to assign anything!");				
-			}
-		});
-	}
-	
-	private Optional<AID> drawATranscoder(boolean useTrust) {
-		return useTrust ? drawUsingTrust() : drawRandomly();
+	public Optional<AID> drawATranscoder() {
+		return getAgent().segmentCount() > 15 ? drawUsingTrust() : drawRandomly();
 	}
 	
 	private Optional<AID> drawUsingTrust() {
 		return Optional.ofNullable(draw());
 	}
 	
-	public AID draw() {
+	private AID draw() {
 		List<TranscoderInfo> tis = getTranscodersAboveThreshold();
 		
 		if (tis.isEmpty()) return null;
@@ -96,14 +72,6 @@ public class DirectTrustTranscodingAssignment extends BrokerTickerBehaviour {
 							.collect(Collectors.toList());
 	}
 	
-	private void sendAssignmentMessage(Segment segment, AID transcoder) {
-		ACLMessage msg = new ACLMessage(ACLMessage.PROPOSE);
-		msg.setProtocol(MessageProtocols.transcode.toString());
-		msg.addReceiver(transcoder);
-		msg.setContent(SerializationHelper.serialize(segment));
-		getAgent().send(msg);
-	}
-	
 	private Optional<AID> drawRandomly() {
 		List<AID> transcoders =  
 				getAgent().getTranscoders().stream()
@@ -114,25 +82,6 @@ public class DirectTrustTranscodingAssignment extends BrokerTickerBehaviour {
 			
 		int rand = getRandom().nextInt(transcoders.size());
 		return Optional.ofNullable(transcoders.get(rand));
-	}
-	
-	private void evaluateTranscoders() {
-		InteractionTrustComponent directTrust = new InteractionTrustComponent(0, 0);
-		
-		StringBuilder str = new StringBuilder("\r\n---\r\n");
-		
-		for(TranscoderInfo transInfo : getAgent().getTranscoders()) {
-			if (!transInfo.getRatings().isEmpty()) {
-				double trustworthy = directTrust.calculate(transInfo.getRatings(), transInfo.getRatings().size());
-				transInfo.setTrustworthy(trustworthy);
-				transInfo.setReliability(directTrust.reliability(transInfo.getRatings()));
-
-				str.append("Trustworthy of " + transInfo.getAID().getName() + " is " + trustworthy + "\r\n");				
-			}
-		}
-		
-		str.append("\r\n---\r\n");
-		logger.log(Logger.INFO, str.toString());		
 	}
 	
 	private Random getRandom() {

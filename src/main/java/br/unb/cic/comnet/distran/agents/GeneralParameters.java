@@ -8,7 +8,7 @@ public class GeneralParameters {
 	private static final Double BETHA = 250D;
 	private static final Double ALPHA = 1D;
 	private static final Integer BUFFER_LENGTH = 5;
-	private static final Double TRUST_THRESHOLD = 0.9;
+	private static final Double TRUST_THRESHOLD = 0.666;
 	private static final Integer WINDOW_LENGTH = 15;
 	
 	public static Long getDuration() {

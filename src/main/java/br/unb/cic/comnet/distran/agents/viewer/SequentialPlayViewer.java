@@ -51,7 +51,6 @@ public class SequentialPlayViewer extends Viewer {
 		addBehaviour(new PlayerTickBehaviour(this, GeneralParameters.getDuration()));
 		
 		ViewerProfile profile = getProfile();
-		
 		addBehaviour(new ReceivingSegmentBehaviour(profile.getLowerReceivingTime(), profile.getHigherReceivingTime()));
 		
 		addBehaviour(new PlaylistRequestingBehaviour(this, GeneralParameters.getDuration()));

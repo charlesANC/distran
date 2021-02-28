@@ -42,14 +42,16 @@ public class SequentialBroker extends Broker {
 		logger.log(Logger.INFO, "Starting broker " + getName());
 		
 		addBehaviour(new TranscoderSearcher(this, 10000));
-		addBehaviour(new SegmentGenerator(this, GeneralParameters.getDuration(), true, 140));		
+		addBehaviour(new SegmentGenerator(this, GeneralParameters.getDuration(), true, 100));		
 		addBehaviour(new PlaylistProviderBehaviour(100, 200));
 		addBehaviour(new PrintUtilityBehaviour(this, 12000));
 		
-		if (getArguments().length == 0 || !getArguments()[0].toString().equals("T")) {
+		if (getArguments().length == 0 || getArguments()[0].toString().equals("R")) {
 			addBehaviour(new RandomTranscodingAssignment(this, GeneralParameters.getDuration()));
-		} else {
+		} else if (getArguments()[0].toString().equals("T")) {
 			addBehaviour(new DirectTrustTranscodingAssignment(this, GeneralParameters.getDuration()));			
+		} else if (getArguments()[0].toString().equals("U")) {
+			addBehaviour(new UCB1TranscodingAssigment(this, GeneralParameters.getDuration()));
 		}
 		
 		publishMe();
@@ -107,7 +109,7 @@ public class SequentialBroker extends Broker {
 		if (transcoders.containsKey(aid)) {
 			transcoders.get(aid).addRating(feedback);
 		} else {
-			throw new InvalidParameterException("I does not have a transcoder named " + feedback.getProvider());			
+			throw new InvalidParameterException("I do not have a transcoder named " + feedback.getProvider());			
 		}
 	}
 	

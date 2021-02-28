@@ -1,10 +1,10 @@
 package br.unb.cic.comnet.distran.agents.broker;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 import br.com.tm.repfogagent.trm.Rating;
 import br.unb.cic.comnet.distran.agents.trm.FactoryRating;
@@ -29,7 +29,9 @@ public class TranscoderInfo implements Serializable, Comparable<TranscoderInfo> 
 	}
 	
 	public List<Rating> getRatings() {
-		return new ArrayList<Rating>(ratings.values());
+		return ratings.values().stream()
+				.sorted((x, y) -> Integer.valueOf(x.getIteration()).compareTo(y.getIteration()))
+				.collect(Collectors.toList());
 	}
 	
 	public void addRating(UtilityFeedback feedback) {

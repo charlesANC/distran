@@ -1,11 +1,11 @@
 
 public class RodarDistran {
-
+/*
 	public static void main(String[] args) {
 		String[] rodarDistran = new String[] {
 				"-gui", 
 				" -agents " + 
-					"b1:br.unb.cic.comnet.distran.agents.broker.SequentialBroker(T);" + 
+					"b1:br.unb.cic.comnet.distran.agents.broker.SequentialBroker(R);" + 
 					"ta1:br.unb.cic.comnet.distran.agents.transcoder.RandomTimeTranscoder(A);" +
 					"tb1:br.unb.cic.comnet.distran.agents.transcoder.RandomTimeTranscoder(B);" +					
 					"tb2:br.unb.cic.comnet.distran.agents.transcoder.RandomTimeTranscoder(B);" +
@@ -38,16 +38,16 @@ public class RodarDistran {
 		
 		jade.Boot.main(rodarDistran);
 	}	
-	
-	/*
+*/	
+
 	public static void main(String[] args) {
 		String[] rodarDistran = new String[] {
 				"-gui", 
 				" -agents " + 
 					"b1:br.unb.cic.comnet.distran.agents.broker.SequentialBroker(T);" + 
-					"t1:br.unb.cic.comnet.distran.agents.transcoder.RandomTimeTranscoder(C);" + 
-					"t2:br.unb.cic.comnet.distran.agents.transcoder.RandomTimeTranscoder(A);" + 
-					"t3:br.unb.cic.comnet.distran.agents.transcoder.RandomTimeTranscoder(B);" + 
+					"t1:br.unb.cic.comnet.distran.agents.transcoder.RandomTimeTranscoder(A);" + 
+					"t2:br.unb.cic.comnet.distran.agents.transcoder.RandomTimeTranscoder(B);" + 
+					"t3:br.unb.cic.comnet.distran.agents.transcoder.RandomTimeTranscoder(C);" + 
 					"v1:br.unb.cic.comnet.distran.agents.viewer.SequentialPlayViewer;" + 
 					"v2:br.unb.cic.comnet.distran.agents.viewer.SequentialPlayViewer;" + 
 					"v3:br.unb.cic.comnet.distran.agents.viewer.SequentialPlayViewer;" + 
@@ -63,6 +63,5 @@ public class RodarDistran {
 		
 		jade.Boot.main(rodarDistran);
 	}
-	*/
 
 }
