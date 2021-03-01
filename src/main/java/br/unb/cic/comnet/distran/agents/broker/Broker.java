@@ -24,4 +24,6 @@ public abstract class Broker extends Agent {
 	
 	public abstract void addTranscoderRating(UtilityFeedback feedback);
 	public abstract Map<String, Set<UtilityFeedback>> getFeedbacks();
+	
+	public abstract void evaluateTranscoders();
 }

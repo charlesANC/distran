@@ -10,6 +10,7 @@ public class GeneralParameters {
 	private static final Integer BUFFER_LENGTH = 5;
 	private static final Double TRUST_THRESHOLD = 0.666;
 	private static final Integer WINDOW_LENGTH = 15;
+	private static final Integer NUM_OF_SEGMENTS = 100;
 	
 	public static Long getDuration() {
 		return DURATION;
@@ -33,6 +34,10 @@ public class GeneralParameters {
 
 	public static int getWindowLength() {
 		return WINDOW_LENGTH;
+	}
+	
+	public static int getNumOfSegments() {
+		return NUM_OF_SEGMENTS;
 	}
 	
 	public static String mountOutputFileName(String fileName) {

@@ -20,9 +20,7 @@ public class Rating implements Serializable {
 	private long requiredLatency;
 	private boolean satisfied;
 	
-	public Rating() {
-	
-	}
+	public Rating() {}
 	
 	public Rating(double value, String term, Date date) {
 		this.value = value;
@@ -138,6 +136,40 @@ public class Rating implements Serializable {
 	public void setSatisfied(boolean satisfied) {
 		this.satisfied = satisfied;
 	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + iteration;
+		result = prime * result + ((nodeName == null) ? 0 : nodeName.hashCode());
+		result = prime * result + ((serverName == null) ? 0 : serverName.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Rating other = (Rating) obj;
+		if (iteration != other.iteration)
+			return false;
+		if (nodeName == null) {
+			if (other.nodeName != null)
+				return false;
+		} else if (!nodeName.equals(other.nodeName))
+			return false;
+		if (serverName == null) {
+			if (other.serverName != null)
+				return false;
+		} else if (!serverName.equals(other.serverName))
+			return false;
+		return true;
+	}	
 
 	@Override
 	public String toString() {

@@ -1,5 +1,9 @@
 package br.unb.cic.comnet.distran.agents.broker;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import br.com.tm.repfogagent.trm.Rating;
 import br.com.tm.repfogagent.trm.components.InteractionTrustComponent;
 import jade.core.Agent;
 import jade.util.Logger;
@@ -21,9 +25,12 @@ public class EvaluateTranscodersBehaviour extends BrokerTickerBehaviour {
 		
 		for(TranscoderInfo transInfo : getAgent().getTranscoders()) {
 			if (!transInfo.getRatings().isEmpty()) {
-				double trustworthy = directTrust.calculate(transInfo.getRatings(), transInfo.getRatings().size());
+				List<Rating> ratings = new ArrayList<>();
+				transInfo.getRatings().values().forEach(ratings::addAll);
+				
+				double trustworthy = directTrust.calculate(ratings, ratings.size());
 				transInfo.setTrustworthy(trustworthy);
-				transInfo.setReliability(directTrust.reliability(transInfo.getRatings()));
+				transInfo.setReliability(directTrust.reliability(ratings));
 
 				str.append("Trustworthy of " + transInfo.getAID().getName() + " is " + trustworthy + "\r\n");				
 			}

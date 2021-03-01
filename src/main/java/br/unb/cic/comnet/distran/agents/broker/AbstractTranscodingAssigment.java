@@ -1,10 +1,7 @@
 package br.unb.cic.comnet.distran.agents.broker;
 
-import java.util.List;
 import java.util.Optional;
 
-import br.com.tm.repfogagent.trm.Rating;
-import br.com.tm.repfogagent.trm.components.InteractionTrustComponent;
 import br.unb.cic.comnet.distran.agents.MessageProtocols;
 import br.unb.cic.comnet.distran.player.Segment;
 import br.unb.cic.comnet.distran.util.SerializationHelper;
@@ -24,7 +21,7 @@ public abstract class AbstractTranscodingAssigment extends BrokerTickerBehaviour
 
 	@Override
 	protected void onTick() {
-		evaluateTranscoders();
+		getAgent().evaluateTranscoders();
 		
 		getAgent().getNonAssignedSegments().stream().forEach(seg -> {
 			Optional<AID> opTranscoder = drawATranscoder();
@@ -52,6 +49,7 @@ public abstract class AbstractTranscodingAssigment extends BrokerTickerBehaviour
 		getAgent().send(msg);
 	}
 	
+/*	
 	private void evaluateTranscoders() {
 		InteractionTrustComponent directTrust = new InteractionTrustComponent(0, 0);
 		
@@ -70,4 +68,5 @@ public abstract class AbstractTranscodingAssigment extends BrokerTickerBehaviour
 		str.append("\r\n---\r\n");
 		logger.log(Logger.INFO, str.toString());		
 	}
+*/	
 }

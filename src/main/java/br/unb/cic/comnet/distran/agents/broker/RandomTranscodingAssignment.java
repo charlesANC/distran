@@ -25,8 +25,9 @@ public class RandomTranscodingAssignment extends AbstractTranscodingAssigment {
 		
 		if (transcoders.isEmpty()) return Optional.empty();
 			
-		int rand = getRandom().nextInt(transcoders.size());
-		return Optional.ofNullable(transcoders.get(rand));
+		int rand = getRandom().nextInt(transcoders.size() * 100);
+		int index = Math.floorDiv(rand, 100);
+		return Optional.ofNullable(transcoders.get(index));
 	}
 
 	private Random getRandom() {

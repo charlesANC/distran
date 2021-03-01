@@ -47,9 +47,16 @@ public class WitnessReputationComponent extends FIREBaseComponent {
 	
 	@Override
 	public double weight(Rating rating, long currentIteration) {
-		if(this.witnessCredibility.containsKey(rating.getNodeName())) {
+	//  Essa linha verificava se a coleção continha a credibilidade do nó que está sendo avaliado,
+	//  no entanto, eu quero a credibilidade do nó que fez a avaliação, portanto o serverNode.
+	//  Não sei se é um bug do programa do Tiago ou se eu entendi errado.
+	//  Vou fazer essa alteração aqui e ver se o resultado é afetado.	
+	//  if(this.witnessCredibility.containsKey(rating.getNodeName())) {		
+		if(this.witnessCredibility.containsKey(rating.getServerName())) {
 			InteractionTrustComponent interactionTrustComponent = new InteractionTrustComponent(0);
-			Double witnessCredibility = this.witnessCredibility.get(rating.getNodeName()); 
+			//Mesma coisa do comentário anterior
+			//Double witnessCredibility = this.witnessCredibility.get(rating.getNodeName());			
+			Double witnessCredibility = this.witnessCredibility.get(rating.getServerName()); 
 			if(witnessCredibility > 0) {
 				return witnessCredibility * interactionTrustComponent.weight(rating, currentIteration);
 			}

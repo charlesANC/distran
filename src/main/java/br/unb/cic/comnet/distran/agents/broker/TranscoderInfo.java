@@ -1,10 +1,12 @@
 package br.unb.cic.comnet.distran.agents.broker;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
 import br.com.tm.repfogagent.trm.Rating;
 import br.unb.cic.comnet.distran.agents.trm.FactoryRating;
@@ -14,31 +16,44 @@ public class TranscoderInfo implements Serializable, Comparable<TranscoderInfo> 
 	private static final long serialVersionUID = 1L;
 	
 	private AID aid;
-	private Map<String, Rating> ratings;
+	private Map<String, Set<Rating>> ratings;
 	private Double totalUtility = 0.0;
 	private Double trustworthy = 1.0;
 	private Double reliability = 0.0;
 	
 	public TranscoderInfo(AID aid) {
 		this.aid = aid;
-		ratings = new ConcurrentHashMap<String, Rating>();
+		ratings = new ConcurrentHashMap<String, Set<Rating>>();
 	}
 	
 	public AID getAID() {
 		return aid;
 	}
 	
-	public List<Rating> getRatings() {
-		return ratings.values().stream()
-				.sorted((x, y) -> Integer.valueOf(x.getIteration()).compareTo(y.getIteration()))
-				.collect(Collectors.toList());
+	public Map<String, Set<Rating>> getRatings() {
+		return new LinkedHashMap<String, Set<Rating>>(ratings);
+	}
+	
+	public Integer getNumOfRatings() {
+		int totalSize = 0;
+		for(String key : ratings.keySet()) {
+			totalSize += ratings.get(key).size();
+		}
+		return totalSize;
 	}
 	
 	public void addRating(UtilityFeedback feedback) {
-		if (!ratings.containsKey(feedback.getSegmentId())) {
-			ratings.put(feedback.getSegmentId(), FactoryRating.create(feedback));
-			setTotalUtility(getTotalUtility() + feedback.getUtility());
+		if (!ratings.containsKey(feedback.getEvaluator())) {
+			ratings.put(feedback.getEvaluator(), new TreeSet<Rating>(new Comparator<Rating>() {
+				@Override
+				public int compare(Rating o1, Rating o2) {
+					return Integer.valueOf(o1.getIteration()).compareTo(o2.getIteration());
+				}
+			}));
 		}
+		
+		ratings.get(feedback.getEvaluator()).add(FactoryRating.create(feedback));
+		setTotalUtility(getTotalUtility() + feedback.getUtility());
 	}
 	
 	public Double getTotalUtility() {

@@ -111,9 +111,9 @@ public class PrintUtilityBehaviour extends BrokerTickerBehaviour {
 	private void appendTranscodersInfo(String fileName) {
 		String info = "" + currentSegmentsInterval() + ";";
 		for(TranscoderInfo ti : getAgent().getTranscoders()) {
-			info += String.format("[%s];%d;%.4f;%.4f;%.2f;", 
+			info += String.format("[%s];%d;%d;%.4f;%.4f;%.2f;", 
 					ti.getAID().getLocalName(),
-					ti.getRatings().size(),
+					ti.getNumOfRatings(),
 					ti.getTrustworthy(), 
 					ti.getReliability(), 
 					ti.getTotalUtility());

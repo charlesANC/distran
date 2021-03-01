@@ -1,6 +1,10 @@
 package br.unb.cic.comnet.distran.agents.broker;
 
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -11,20 +15,29 @@ import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+import br.com.tm.repfogagent.trm.FIREtrm;
+import br.com.tm.repfogagent.trm.Rating;
+import br.com.tm.repfogagent.trm.components.InteractionTrustComponent;
+import br.com.tm.repfogagent.trm.components.WitnessReputationComponent;
 import br.unb.cic.comnet.distran.agents.GeneralParameters;
 import br.unb.cic.comnet.distran.agents.services.BrokerageServiceDescriptor;
+import br.unb.cic.comnet.distran.agents.viewer.SequentialPlayViewer;
+import br.unb.cic.comnet.distran.agents.viewer.ViewerProfile;
 import br.unb.cic.comnet.distran.player.Segment;
 import jade.core.AID;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.util.Logger;
+import jade.wrapper.AgentController;
+import jade.wrapper.StaleProxyException;
 
 public class SequentialBroker extends Broker {
 	private static final long serialVersionUID = 1L;
 	
 	Logger logger = Logger.getJADELogger(getClass().getName());
 	
+	private String accreditedViewer;
 	private Map<AID, TranscoderInfo> transcoders;
 	private Set<Segment> segments;
 	private Map<String, Set<UtilityFeedback>> feedbacks;
@@ -42,7 +55,7 @@ public class SequentialBroker extends Broker {
 		logger.log(Logger.INFO, "Starting broker " + getName());
 		
 		addBehaviour(new TranscoderSearcher(this, 10000));
-		addBehaviour(new SegmentGenerator(this, GeneralParameters.getDuration(), true, 100));		
+		addBehaviour(new SegmentGenerator(this, GeneralParameters.getDuration(), true, GeneralParameters.getNumOfSegments()));		
 		addBehaviour(new PlaylistProviderBehaviour(100, 200));
 		addBehaviour(new PrintUtilityBehaviour(this, 12000));
 		
@@ -53,6 +66,8 @@ public class SequentialBroker extends Broker {
 		} else if (getArguments()[0].toString().equals("U")) {
 			addBehaviour(new UCB1TranscodingAssigment(this, GeneralParameters.getDuration()));
 		}
+		
+		this.accreditedViewer = createAccreditedViewer();
 		
 		publishMe();
 	}
@@ -147,4 +162,127 @@ public class SequentialBroker extends Broker {
 		}
 		feedbacks.get(feedback.getSegmentId()).add(feedback);
 	}
+/*	
+	@Override
+	public void evaluateTranscoders() {
+		InteractionTrustComponent directTrust = new InteractionTrustComponent(0, 0);
+		
+		StringBuilder str = new StringBuilder("\r\n---\r\n");
+		
+		for(TranscoderInfo transInfo : getTranscoders()) {
+			if (!transInfo.getRatings().isEmpty()) {
+				double trustworthy = directTrust.calculate(transInfo.getRatings(), transInfo.getRatings().size());
+				transInfo.setTrustworthy(trustworthy);
+				transInfo.setReliability(directTrust.reliability(transInfo.getRatings()));
+
+				str.append("Trustworthy of " + transInfo.getAID().getName() + " is " + trustworthy + "\r\n");				
+			}
+		}
+		
+		str.append("\r\n---\r\n");
+		logger.log(Logger.INFO, str.toString());			
+	}
+*/
+	@Override
+	public void evaluateTranscoders() {
+
+		StringBuilder str = new StringBuilder("\r\n---\r\n");
+		
+		for(TranscoderInfo transInfo : getTranscoders()) {
+			if (!transInfo.getRatings().isEmpty()) {
+				
+				List<Rating> local = new ArrayList<>();
+				List<Rating> supportingRatings = new ArrayList<>();				
+				Map<String, List<Rating>> ratingsPerNode = new LinkedHashMap<>();
+				
+				splitRatings(transInfo.getRatings(), local, supportingRatings, ratingsPerNode);
+				
+				if (!local.isEmpty() && !supportingRatings.isEmpty()) {
+					WitnessReputationComponent witnessComponent = new WitnessReputationComponent(0, 0.4, 1.0, ratingsPerNode, local);
+					
+					double witnessValue = witnessComponent.calculate(supportingRatings, supportingRatings.size());
+					double reliabilityWR = witnessComponent.reliability(supportingRatings);
+					
+					witnessComponent.setCalculatedValue(witnessValue);
+					witnessComponent.setCalculatedReliability(reliabilityWR);
+					
+					InteractionTrustComponent directComponent = new InteractionTrustComponent(0,  0.8);				
+					
+					if (!local.isEmpty()) {
+						double interactionTrustValue = directComponent.calculate(local, local.size());
+						double reliabilityIT = directComponent.reliability(local);
+						
+						directComponent.setCalculatedValue(interactionTrustValue);
+						directComponent.setCalculatedReliability(reliabilityIT);					
+					} else {
+						directComponent.setCalculatedValue(1.0);
+						directComponent.setCalculatedReliability(1.0);					
+					}
+					
+					FIREtrm firEtrm = new FIREtrm(Arrays.asList(witnessComponent, directComponent));
+					Double fireValue = firEtrm.calculate();
+					Double overallReliability = firEtrm.reliability();				
+					
+					transInfo.setTrustworthy(fireValue);
+					transInfo.setReliability(overallReliability);
+
+					str.append("Trustworthy of " + transInfo.getAID().getName() + " is " + fireValue + "\r\n");				
+				}
+			}
+		}
+		
+		str.append("\r\n---\r\n");
+		logger.log(Logger.INFO, str.toString());			
+	}
+	
+	private void splitRatings(
+			Map<String, Set<Rating>> origin, 
+			List<Rating> direct, 
+			List<Rating> supportingRatings, 
+			Map<String, List<Rating>> ratingsPerNode
+	) {
+		Map<String, List<Rating>> source = new LinkedHashMap<>();
+		for(String key : origin.keySet()) {
+			source.put(key, new ArrayList<>(origin.get(key)));
+		}
+		
+		direct.addAll(source.getOrDefault(accreditedViewer, Collections.emptyList()));
+		source.remove(accreditedViewer);
+		
+		if (!direct.isEmpty()) {
+			for(Rating directRating : direct) {
+				for(String key : source.keySet()) {
+					for(Rating indirectRating : source.get(key)) {
+						if (indirectRating.getIteration() == directRating.getIteration()) {
+							if (!ratingsPerNode.containsKey(key)) {
+								ratingsPerNode.put(key, new ArrayList<Rating>());
+							}
+							ratingsPerNode.get(key).add(indirectRating);
+							supportingRatings.add(indirectRating);
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	private String createAccreditedViewer() {
+		AgentController viewer;
+		try {
+			viewer = getContainerController()
+				.createNewAgent(
+						"vbk", 
+						SequentialPlayViewer.class.getName(), 
+						new String[] {ViewerProfile.BK.name()});
+			
+			viewer.start();
+			logger.log(Logger.INFO, "Viewer" + viewer.getName() + " has been created.");
+			return viewer.getName();
+			
+		} catch (StaleProxyException e) {
+			logger.log(Logger.SEVERE, "Error on creating broker viewer! " + e.getMessage());
+			return null;
+		}
+	}
+	
 }
