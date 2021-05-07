@@ -2,7 +2,7 @@ package br.unb.cic.comnet.distran.agents.viewer;
 
 public enum ViewerProfile {
 	
-	A(200, 300), B(400, 600), C(750, 1250), BK(100, 200);
+	A(210, 290), B(400, 600), C(750, 1250), BK(100, 200);
 	
 	private int lowerReceivingTime;
 	private int higherReceivingTime;

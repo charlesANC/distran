@@ -284,5 +284,12 @@ public class SequentialBroker extends Broker {
 			return null;
 		}
 	}
+
+	@Override
+	public long segmentCountBySource(String source) {
+		return segments.stream()
+				.filter(x -> (x.getSource() != null && x.getSource().equals(source)))
+				.count();
+	}
 	
 }

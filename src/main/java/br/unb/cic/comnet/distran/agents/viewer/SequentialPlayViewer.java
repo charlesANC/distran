@@ -38,8 +38,8 @@ public class SequentialPlayViewer extends Viewer {
 	public SequentialPlayViewer() {
 		super();
 		
-		player = new Player(GeneralParameters.getBufferLength());
-		player.addRequestingListener(new RequestSegment(this));
+		this.player = new Player(GeneralParameters.getBufferLength());
+		this.player.addRequestingListener(new RequestSegment(this));
 	}
 
 	@Override

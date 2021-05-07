@@ -44,7 +44,7 @@ public class RodarDistran {
 		String[] rodarDistran = new String[] {
 				"-gui", 
 				" -agents " + 
-					"b1:br.unb.cic.comnet.distran.agents.broker.SequentialBroker(T);" + 
+					"b1:br.unb.cic.comnet.distran.agents.broker.SequentialBroker(U);" + 
 					"t1:br.unb.cic.comnet.distran.agents.transcoder.RandomTimeTranscoder(A);" + 
 					"t2:br.unb.cic.comnet.distran.agents.transcoder.RandomTimeTranscoder(B);" + 
 					"t3:br.unb.cic.comnet.distran.agents.transcoder.RandomTimeTranscoder(C);" + 

@@ -113,6 +113,7 @@ public class PrintUtilityBehaviour extends BrokerTickerBehaviour {
 		for(TranscoderInfo ti : getAgent().getTranscoders()) {
 			info += String.format("[%s];%d;%d;%.4f;%.4f;%.2f;", 
 					ti.getAID().getLocalName(),
+					getAgent().segmentCountBySource(ti.getAID().getName()),
 					ti.getNumOfRatings(),
 					ti.getTrustworthy(), 
 					ti.getReliability(), 

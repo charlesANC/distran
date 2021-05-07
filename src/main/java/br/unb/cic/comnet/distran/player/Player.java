@@ -85,19 +85,19 @@ public class Player {
 		
 		SegmentInfo head = buffer.peek();
 		
-		if (head.isPlaying() && head.isEmpty()) {
+		if (head != null && head.isPlaying() && head.isEmpty()) {
 			if (head.playbackEllapsed() > head.getDuration() * 3) {
 				head = stopPlay(head, 0);
 			}
 		}
-		
-		if (head.isPlaying() && !head.isEmpty()) {
+
+		if (head != null && head.isPlaying() && !head.isEmpty()) {
 			head = stopPlay(head, 1);
 		} 
 		
 		if (head != null && !head.isPlaying()) {
 			startPlay(head);			
-		}		
+		}			
 	}
 	
 	public void updateSegmentsSource(List<Segment> playlist) {

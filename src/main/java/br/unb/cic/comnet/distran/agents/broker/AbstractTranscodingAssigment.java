@@ -21,22 +21,26 @@ public abstract class AbstractTranscodingAssigment extends BrokerTickerBehaviour
 
 	@Override
 	protected void onTick() {
-		getAgent().evaluateTranscoders();
-		
-		getAgent().getNonAssignedSegments().stream().forEach(seg -> {
-			Optional<AID> opTranscoder = drawATranscoder();
+		try {
+			getAgent().evaluateTranscoders();
 			
-			if (opTranscoder.isPresent()) {
-				AID aid = opTranscoder.get();
+			getAgent().getNonAssignedSegments().stream().forEach(seg -> {
+				Optional<AID> opTranscoder = drawATranscoder();
 				
-				logger.log(Logger.INFO, "Assigning seg " + seg + " to " + aid);
-				
-				sendAssignmentMessage(seg, aid);
-				seg.setSource(aid.getName());				
-			} else {
-				logger.log(Logger.INFO, "Has no transcoder to assign anything!");				
-			}
-		});
+				if (opTranscoder.isPresent()) {
+					AID aid = opTranscoder.get();
+					
+					logger.log(Logger.INFO, "Assigning seg " + seg + " to " + aid);
+					
+					sendAssignmentMessage(seg, aid);
+					seg.setSource(aid.getName());				
+				} else {
+					logger.log(Logger.INFO, "Has no transcoder to assign anything!");				
+				}
+			});
+		} catch (Exception e) {
+			logger.log(Logger.SEVERE, "TERRIBLE!!! TERRIBLE!!! " + e.getMessage());
+		}
 	}
 	
 	public abstract Optional<AID> drawATranscoder();

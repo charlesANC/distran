@@ -16,6 +16,7 @@ public abstract class Broker extends Agent {
 	public abstract void addSegment(Segment segment);
 	public abstract Optional<Segment> getSegment(String segmentId);
 	public abstract long segmentCount();
+	public abstract long segmentCountBySource(String source);
 	public abstract List<Segment> getPlaylist();
 	public abstract List<Segment> getNonAssignedSegments();
 	
