@@ -182,7 +182,7 @@ public class SequentialBroker extends Broker {
 		str.append("\r\n---\r\n");
 		logger.log(Logger.INFO, str.toString());			
 	}
-*/
+
 	@Override
 	public void evaluateTranscoders() {
 
@@ -233,6 +233,13 @@ public class SequentialBroker extends Broker {
 		
 		str.append("\r\n---\r\n");
 		logger.log(Logger.INFO, str.toString());			
+	}
+*/
+	
+	@Override
+	public void evaluateTranscoders() {
+		// new FIRETranscoderEvaluator().evaluateTranscoders(getTranscoders(), accreditedViewer);
+		new ModifiedFIRETranscoderEvaluator().evaluateTranscoders(getTranscoders());
 	}
 	
 	private void splitRatings(
