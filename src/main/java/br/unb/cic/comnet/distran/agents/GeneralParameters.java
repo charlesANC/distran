@@ -8,7 +8,7 @@ public class GeneralParameters {
 	private static final Double BETHA = 1000D;
 	private static final Double ALPHA = 1D;
 	private static final Integer BUFFER_LENGTH = 3;
-	private static final Double TRUST_THRESHOLD = 0.8;
+	private static final Double TRUST_THRESHOLD = 0.3;
 	private static final Integer WINDOW_LENGTH = 15;
 	private static final Integer NUM_OF_SEGMENTS = 300;
 	
@@ -41,8 +41,8 @@ public class GeneralParameters {
 	}
 	
 	public static String mountOutputFileName(String fileName) {
-		String dir = System.getProperty("outDir", ".\\");
-		//String dir = System.getProperty("outDir", "c:\\temp\\");
+		//String dir = System.getProperty("outDir", ".\\");
+		String dir = System.getProperty("outDir", "c:\\temp\\");
 		File file = new File(dir, fileName);
 		return file.getAbsolutePath();
 	}

@@ -9,9 +9,12 @@ public class RodarDistran {
 			System.out.println("    2: MAB UCB ");
 			System.out.println("    3: ReNoS ");			
 			System.out.println("    4: ReNoS com FIRE alterado ");
-			System.out.println("    5: MAB UCB - Sem white washing ");
-			System.out.println("    6: ReNoS - Sem white washing  ");			
-			System.out.println("    7: ReNoS com FIRE alterado - Sem white washing ");			
+			System.out.println("    5: Random choice - Sem white washing ");			
+			System.out.println("    6: MAB UCB - Sem white washing ");
+			System.out.println("    7: ReNoS - Sem white washing  ");			
+			System.out.println("    8: ReNoS com FIRE alterado - Sem white washing ");
+			System.out.println("    9: ReNoS 2 com FIRE");
+			System.out.println("   10: ReNoS 2 com FIRE - Sem white washing ");			
 		}
 		
 		try {
@@ -46,6 +49,12 @@ public class RodarDistran {
 		} else if ("8".contentEquals(selecao)) {
 			System.out.println("Selecionando ReNoS modificado sem White Washing...");
 			return configuracaoReNoSAlteradoSemWhiteWashing();			
+		} else if ("9".contentEquals(selecao)) {
+			System.out.println("Selecionando ReNoS modificado sem White Washing...");
+			return configuracaoReNoS2();
+		} else if ("10".contentEquals(selecao)) {
+			System.out.println("Selecionando ReNoS modificado sem White Washing...");
+			return configuracaoReNoS2SemWhiteWashing();						
 		} else {
 			throw new InvalidParameterException("Configuração " + selecao + " não reconhecida!");
 		}
@@ -112,6 +121,28 @@ public class RodarDistran {
 				"-gui", 
 				" -agents " + 
 					"br2:br.unb.cic.comnet.distran.agents.broker.FIRE.FIRETRMBroker"  
+					+ montaRandomTranscoders("ABBCC")  
+					+ montaSequentialPlayers(20)										
+		};
+	}	
+	
+	public static String[] configuracaoReNoS2() {
+		return new String[] {
+				"-gui", 
+				" -agents " + 
+					"br1:br.unb.cic.comnet.distran.agents.broker.mab.MabReNosTwoBrokerFIRE"  
+					+ montaRandomTranscoders("ABBCC")  
+					+ montaSequentialPlayers(18)						
+					+ ";uv1:br.unb.cic.comnet.distran.agents.viewer.untrustable.UntrustableSequentialPlayViewer(A, tc5)"  					
+					+ ";uv2:br.unb.cic.comnet.distran.agents.viewer.untrustable.UntrustableSequentialPlayViewer(A, tc5)"								
+		};
+	}
+	
+	public static String[] configuracaoReNoS2SemWhiteWashing() {
+		return new String[] {
+				"-gui", 
+				" -agents " + 
+					"br2:br.unb.cic.comnet.distran.agents.broker.mab.MabReNosTwoBrokerFIRE"  
 					+ montaRandomTranscoders("ABBCC")  
 					+ montaSequentialPlayers(20)										
 		};

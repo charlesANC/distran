@@ -15,6 +15,7 @@ import br.unb.cic.comnet.distran.agents.GeneralParameters;
 import br.unb.cic.comnet.distran.agents.broker.Broker;
 import br.unb.cic.comnet.distran.agents.broker.PlaylistProviderBehaviour;
 import br.unb.cic.comnet.distran.agents.broker.PrintUtilityBehaviour;
+import br.unb.cic.comnet.distran.agents.broker.ReNoSTwoTranscodingAssignment;
 import br.unb.cic.comnet.distran.agents.broker.SegmentGenerator;
 import br.unb.cic.comnet.distran.agents.broker.TranscoderInfo;
 import br.unb.cic.comnet.distran.agents.broker.TranscoderSearcher;
@@ -32,7 +33,7 @@ import jade.util.Logger;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
 
-public class MabUCBBrokerFIRE extends Broker {
+public class MabReNosTwoBrokerFIRE extends Broker {
 	private static final long serialVersionUID = 1L;
 	
 	Logger logger = Logger.getJADELogger(getClass().getName());
@@ -42,7 +43,7 @@ public class MabUCBBrokerFIRE extends Broker {
 	private Set<Segment> segments;
 	private Map<String, Set<UtilityFeedback>> feedbacks;
 	
-	public MabUCBBrokerFIRE() {
+	public MabReNosTwoBrokerFIRE() {
 		super();
 		
 		transcoders = new TreeMap<AID, TranscoderInfo>();
@@ -59,7 +60,7 @@ public class MabUCBBrokerFIRE extends Broker {
 		addBehaviour(new PlaylistProviderBehaviour(100, 200));
 		addBehaviour(new PrintUtilityBehaviour(this, 12000));
 		
-		addBehaviour(new UCB1TranscodingAssigment(this, GeneralParameters.getDuration()));
+		addBehaviour(new ReNoSTwoTranscodingAssignment(this, GeneralParameters.getDuration()));
 		
 		this.accreditedViewer = createAccreditedViewer();		
 		
@@ -102,7 +103,12 @@ public class MabUCBBrokerFIRE extends Broker {
 	
 	@Override
 	public void addTranscoders(Set<AID> newTranscoders) {
-		newTranscoders.stream().forEach(aid -> transcoders.putIfAbsent(aid, new TranscoderInfo(aid)));
+		newTranscoders.stream().forEach(aid -> {
+			TranscoderInfo info = new TranscoderInfo(aid);
+			info.setTrustworthy(0.5);
+			info.setReliability(0.5);
+			transcoders.putIfAbsent(aid, info);
+		});
 	}
 	
 	@Override
