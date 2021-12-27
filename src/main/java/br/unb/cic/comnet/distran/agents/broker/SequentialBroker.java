@@ -2,7 +2,6 @@ package br.unb.cic.comnet.distran.agents.broker;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -15,11 +14,10 @@ import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-import br.com.tm.repfogagent.trm.FIREtrm;
 import br.com.tm.repfogagent.trm.Rating;
-import br.com.tm.repfogagent.trm.components.InteractionTrustComponent;
-import br.com.tm.repfogagent.trm.components.WitnessReputationComponent;
 import br.unb.cic.comnet.distran.agents.GeneralParameters;
+import br.unb.cic.comnet.distran.agents.broker.mab.UCB1TranscodingAssigment;
+import br.unb.cic.comnet.distran.agents.evaluators.ModifiedFIRETranscoderEvaluator;
 import br.unb.cic.comnet.distran.agents.services.BrokerageServiceDescriptor;
 import br.unb.cic.comnet.distran.agents.viewer.SequentialPlayViewer;
 import br.unb.cic.comnet.distran.agents.viewer.ViewerProfile;

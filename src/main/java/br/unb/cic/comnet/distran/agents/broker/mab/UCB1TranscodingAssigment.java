@@ -1,7 +1,9 @@
-package br.unb.cic.comnet.distran.agents.broker;
+package br.unb.cic.comnet.distran.agents.broker.mab;
 
 import java.util.Optional;
 
+import br.unb.cic.comnet.distran.agents.broker.AbstractTranscodingAssigment;
+import br.unb.cic.comnet.distran.agents.broker.TranscoderInfo;
 import jade.core.AID;
 import jade.core.Agent;
 

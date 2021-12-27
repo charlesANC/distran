@@ -1,13 +1,14 @@
-package br.unb.cic.comnet.distran.agents.broker;
+package br.unb.cic.comnet.distran.agents.evaluators;
 
 import java.util.Collection;
 import java.util.Set;
 
 import br.com.tm.repfogagent.trm.Rating;
+import br.unb.cic.comnet.distran.agents.broker.TranscoderInfo;
 
 public class AverageUtilityEvaluator {
 	
-	public void evaluateTranscoders(Collection<TranscoderInfo> transcoders) {
+	public synchronized void  evaluateTranscoders(Collection<TranscoderInfo> transcoders) {
 		for(TranscoderInfo transcoder : transcoders) {
 			long qtdRatings = 0;
 			double sumUtility = 0;

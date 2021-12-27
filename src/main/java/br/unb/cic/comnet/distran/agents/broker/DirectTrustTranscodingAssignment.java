@@ -25,7 +25,7 @@ public class DirectTrustTranscodingAssignment extends AbstractTranscodingAssigme
 
 	@Override
 	public Optional<AID> drawATranscoder() {
-		return getAgent().segmentCount() > 15 ? drawUsingTrust() : drawRandomly();
+		return getAgent().segmentCount() > 25 ? drawUsingTrust() : drawRandomly();
 	}
 	
 	private Optional<AID> drawUsingTrust() {

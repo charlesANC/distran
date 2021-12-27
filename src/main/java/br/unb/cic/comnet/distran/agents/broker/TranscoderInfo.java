@@ -9,6 +9,7 @@ import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 
 import br.com.tm.repfogagent.trm.Rating;
+import br.unb.cic.comnet.distran.agents.GeneralParameters;
 import br.unb.cic.comnet.distran.agents.trm.FactoryRating;
 import jade.core.AID;
 
@@ -18,7 +19,7 @@ public class TranscoderInfo implements Serializable, Comparable<TranscoderInfo> 
 	private AID aid;
 	private Map<String, Set<Rating>> ratings;
 	private Double totalUtility = 0.0;
-	private Double trustworthy = 1.0;
+	private Double trustworthy = (1.0 + GeneralParameters.getTrustThreshold()) / 2;
 	private Double reliability = 0.0;
 	
 	public TranscoderInfo(AID aid) {

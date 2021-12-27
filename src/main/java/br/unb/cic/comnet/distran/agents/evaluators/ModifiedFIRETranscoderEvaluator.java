@@ -1,4 +1,4 @@
-package br.unb.cic.comnet.distran.agents.broker;
+package br.unb.cic.comnet.distran.agents.evaluators;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,6 +13,7 @@ import br.com.tm.repfogagent.trm.Rating;
 import br.com.tm.repfogagent.trm.components.InteractionTrustComponent;
 import br.com.tm.repfogagent.trm.components.WitnessReputationComponent;
 import br.unb.cic.comnet.distran.agents.GeneralParameters;
+import br.unb.cic.comnet.distran.agents.broker.TranscoderInfo;
 import jade.util.Logger;
 
 public class ModifiedFIRETranscoderEvaluator {

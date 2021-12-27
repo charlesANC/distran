@@ -1,4 +1,4 @@
-package br.unb.cic.comnet.distran.agents.broker;
+package br.unb.cic.comnet.distran.agents.evaluators;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,6 +13,7 @@ import br.com.tm.repfogagent.trm.FIREtrm;
 import br.com.tm.repfogagent.trm.Rating;
 import br.com.tm.repfogagent.trm.components.InteractionTrustComponent;
 import br.com.tm.repfogagent.trm.components.WitnessReputationComponent;
+import br.unb.cic.comnet.distran.agents.broker.TranscoderInfo;
 import jade.util.Logger;
 
 public class FIRETranscoderEvaluator {
@@ -33,7 +34,7 @@ public class FIRETranscoderEvaluator {
 				splitRatings(transInfo.getRatings(), accreditedViewer, local, supportingRatings, ratingsPerNode);
 				
 				if (!local.isEmpty() && !supportingRatings.isEmpty()) {
-					WitnessReputationComponent witnessComponent = new WitnessReputationComponent(0, 0.4, 1.0, ratingsPerNode, local);
+					WitnessReputationComponent witnessComponent = new WitnessReputationComponent(0, 0.4, 0.8, ratingsPerNode, local);
 					
 					double witnessValue = witnessComponent.calculate(supportingRatings, supportingRatings.size());
 					double reliabilityWR = witnessComponent.reliability(supportingRatings);
