@@ -1,5 +1,9 @@
 package br.unb.cic.comnet.distran.agents.broker;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -9,6 +13,7 @@ import org.apache.commons.math3.distribution.NormalDistribution;
 import br.unb.cic.comnet.distran.agents.GeneralParameters;
 import jade.core.AID;
 import jade.core.Agent;
+import jade.util.Logger;
 
 public class ReNoSTwoTranscodingAssignment extends AbstractTranscodingAssigment {
 	
@@ -29,7 +34,10 @@ public class ReNoSTwoTranscodingAssignment extends AbstractTranscodingAssigment 
 		
 		for(TranscoderInfo ti : tis) {
 			if (ti.getTrustworthy() != null && ti.getReliability() != null) {
-				Double sample = sampleFromNormal(ti.getTrustworthy(), ti.getReliability());
+				Double sample = sample(ti.getTrustworthy(), ti.getReliability());
+				
+				//append(ti.getAID(), ti.getTrustworthy(), ti.getReliability(), sample);
+				
 				if (sample >= bestSample) {
 					bestSample = sample;
 					bestAID = ti.getAID();
@@ -40,8 +48,23 @@ public class ReNoSTwoTranscodingAssignment extends AbstractTranscodingAssigment 
 		return Optional.ofNullable(bestAID);
 	}
 	
-	private Double sampleFromNormal(Double trustworthiness, Double reliability) {
-		return new NormalDistribution(trustworthiness, 1 - reliability).sample();
+	private double sample(double trust, double reliability) {
+		return sample(createNormal(trust, reliability));
+	}
+	
+	private Double sample(NormalDistribution distribution) {
+		return Math.min(distribution.sample(), 1D);
+	}
+	
+	private NormalDistribution createNormal(double trust, double reliability) {
+		return new NormalDistribution(
+			trust * reliability, 
+			desvpad(reliability)
+		);
+	}
+	
+	private double desvpad(double reliability) {
+		return Math.exp(-2 * reliability);
 	}
 	
 	private List<TranscoderInfo> getTranscodersAboveThreshold() {
@@ -49,5 +72,18 @@ public class ReNoSTwoTranscodingAssignment extends AbstractTranscodingAssigment 
 				.filter(x -> x.getTrustworthy() >= GeneralParameters.getTrustThreshold())
 					.sorted((x, y) -> y.getTrustworthy().compareTo(x.getTrustworthy()))
 							.collect(Collectors.toList());
-	}	
+	}
+	
+	private void append(AID aid, Double trustworthiness, Double reliability, Double sample) {
+		try (
+				 FileWriter fw = new FileWriter("c:\\temp\\Thesis\\renos2samples.txt", true);
+				 BufferedWriter bw = new BufferedWriter(fw);
+				 PrintWriter pw = new PrintWriter(bw)
+			){
+				pw.println(String.format("%s;%.4f;%.4f;%.4f", aid.getLocalName(), trustworthiness, reliability, sample));
+			} catch (IOException e) {
+				e.printStackTrace();
+				logger.log(Logger.WARNING, "Can not write out transcoders info!");			
+			}		
+	}
 }

@@ -66,7 +66,7 @@ public class RodarDistran {
 				" -agents " + 
 						"br1:br.unb.cic.comnet.distran.agents.broker.randomChoice.RandomChoiceBroker"  
 						+ montaRandomTranscoders("ABBCC")  
-						+ montaSequentialPlayers(18)	
+						+ montaSequentialPlayers(20)	
 						+ ";uv1:br.unb.cic.comnet.distran.agents.viewer.untrustable.UntrustableSequentialPlayViewer(A, tc5)"  					
 						+ ";uv2:br.unb.cic.comnet.distran.agents.viewer.untrustable.UntrustableSequentialPlayViewer(A, tc5)"		
 			};		
@@ -88,7 +88,7 @@ public class RodarDistran {
 				" -agents " + 
 					"bu1:br.unb.cic.comnet.distran.agents.broker.mab.MabUCBBroker"  
 					+ montaRandomTranscoders("ABBCC")  
-					+ montaSequentialPlayers(18)						
+					+ montaSequentialPlayers(20)						
 					+ ";uv1:br.unb.cic.comnet.distran.agents.viewer.untrustable.UntrustableSequentialPlayViewer(A, tc5)"  					
 					+ ";uv2:br.unb.cic.comnet.distran.agents.viewer.untrustable.UntrustableSequentialPlayViewer(A, tc5)"				
 		};
@@ -110,7 +110,7 @@ public class RodarDistran {
 				" -agents " + 
 					"br1:br.unb.cic.comnet.distran.agents.broker.FIRE.FIRETRMBroker"  
 					+ montaRandomTranscoders("ABBCC")  
-					+ montaSequentialPlayers(18)						
+					+ montaSequentialPlayers(20)						
 					+ ";uv1:br.unb.cic.comnet.distran.agents.viewer.untrustable.UntrustableSequentialPlayViewer(A, tc5)"  					
 					+ ";uv2:br.unb.cic.comnet.distran.agents.viewer.untrustable.UntrustableSequentialPlayViewer(A, tc5)"								
 		};
@@ -132,7 +132,7 @@ public class RodarDistran {
 				" -agents " + 
 					"br1:br.unb.cic.comnet.distran.agents.broker.mab.MabReNosTwoBrokerFIRE"  
 					+ montaRandomTranscoders("ABBCC")  
-					+ montaSequentialPlayers(18)						
+					+ montaSequentialPlayers(20)						
 					+ ";uv1:br.unb.cic.comnet.distran.agents.viewer.untrustable.UntrustableSequentialPlayViewer(A, tc5)"  					
 					+ ";uv2:br.unb.cic.comnet.distran.agents.viewer.untrustable.UntrustableSequentialPlayViewer(A, tc5)"								
 		};
@@ -154,7 +154,7 @@ public class RodarDistran {
 				" -agents " + 
 					"bra1:br.unb.cic.comnet.distran.agents.broker.FIRE.ModifiedFIRETRMBroker" 
 					+ montaRandomTranscoders("ABBCC")  
-					+ montaSequentialPlayers(18)						
+					+ montaSequentialPlayers(20)						
 					+ ";uv1:br.unb.cic.comnet.distran.agents.viewer.untrustable.UntrustableSequentialPlayViewer(A, tc5)"  					
 					+ ";uv2:br.unb.cic.comnet.distran.agents.viewer.untrustable.UntrustableSequentialPlayViewer(A, tc5)"					
 		};

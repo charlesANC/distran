@@ -52,7 +52,7 @@ public class PrintUtilityBehaviour extends BrokerTickerBehaviour {
 							.collect(Collectors.toList());
 				
 				for(UtilityFeedback feedback : feedbacks) {
-					writer.write(String.format("%s;%s;%s;%s;%s;%s;%d;%.04f\r\n", 
+					writer.write(String.format("%s;%s;%s;%s;%s;%s;%d;%.04f;%.04f\r\n", 
 							segmentId, 
 							feedback.getEvaluator(),
 							feedback.getProvider(),
@@ -60,7 +60,8 @@ public class PrintUtilityBehaviour extends BrokerTickerBehaviour {
 							formater.format(feedback.getRequestTime()),
 							formater.format(feedback.getPlayTime()),
 							feedback.getPlayInterval(),
-							feedback.getStandardUtility()
+							feedback.getStandardUtility(), 
+							feedback.getUtility()
 					));
 				}
 			}

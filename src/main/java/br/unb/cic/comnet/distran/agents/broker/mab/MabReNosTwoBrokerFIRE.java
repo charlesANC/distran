@@ -105,7 +105,7 @@ public class MabReNosTwoBrokerFIRE extends Broker {
 	public void addTranscoders(Set<AID> newTranscoders) {
 		newTranscoders.stream().forEach(aid -> {
 			TranscoderInfo info = new TranscoderInfo(aid);
-			info.setTrustworthy(0.5);
+			info.setTrustworthy(0.75);
 			info.setReliability(0.5);
 			transcoders.putIfAbsent(aid, info);
 		});
