@@ -39,10 +39,10 @@ public class RodarDistran {
 			return configuracaoReNoSAlterado();
 		} else if ("5".contentEquals(selecao)) {
 			System.out.println("Selecionando Random Choice Sem White Washing...");
-			return configuracaoUCBSemWhiteWashing();
+			return configuracaoRandomSemWhiteWashing();
 		} else if ("6".contentEquals(selecao)) {
-				System.out.println("Selecionando MAB UCB sem White Washing...");
-				return configuracaoUCBSemWhiteWashing();			
+			System.out.println("Selecionando MAB UCB sem White Washing...");
+			return configuracaoUCBSemWhiteWashing();			
 		} else if ("7".contentEquals(selecao)) {
 			System.out.println("Selecionando ReNoS sem White Washing...");
 			return configuracaoReNoSSemWhiteWashing();			
