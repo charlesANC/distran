@@ -13,7 +13,14 @@ import java.util.stream.Collectors;
 import br.unb.cic.comnet.distran.agents.GeneralParameters;
 import br.unb.cic.comnet.distran.agents.trm.FactoryRating;
 import br.unb.cic.comnet.distran.player.Segment;
+import jade.content.lang.Codec;
+import jade.content.lang.sl.SLCodec;
+import jade.content.onto.Ontology;
+import jade.content.onto.basic.Action;
 import jade.core.Agent;
+import jade.domain.JADEAgentManagement.JADEManagementOntology;
+import jade.domain.JADEAgentManagement.ShutdownPlatform;
+import jade.lang.acl.ACLMessage;
 import jade.util.Logger;
 
 public class PrintUtilityBehaviour extends BrokerTickerBehaviour {
@@ -32,6 +39,10 @@ public class PrintUtilityBehaviour extends BrokerTickerBehaviour {
 		printUtility(GeneralParameters.mountOutputFileName("util_" + System.currentTimeMillis() + "_.txt"));
 		printFeedbacks(GeneralParameters.mountOutputFileName("feedback_" + System.currentTimeMillis() + "_.txt"));
 		appendTranscodersInfo(GeneralParameters.mountOutputFileName("transcoders_.txt"));
+		
+		if (hasCompleted()) {
+			shutdown();
+		}
 	}
 	
 	private void printFeedbacks(String fileName) {
@@ -140,4 +151,33 @@ public class PrintUtilityBehaviour extends BrokerTickerBehaviour {
 		return getAgent().getPlaylist().get(0).getId() + "-" + 
 				getAgent().getPlaylist().get(getAgent().getPlaylist().size()-1).getId();
 	}
+	
+	private boolean hasCompleted() {
+		List<String> segmentIds = getSegmentIds();
+		// I suppose the initial number of feedbacks is equal to the final number of feedbacks
+		return segmentIds.size() == GeneralParameters.getNumOfSegments() && 
+					getAgent().getFeedbacks().get(segmentIds.get(0)).size() == getAgent().getFeedbacks().get(segmentIds.get(segmentIds.size()-1)).size();	
+	}
+	
+	private List<String> getSegmentIds() {
+		return getAgent().getFeedbacks().keySet().stream()
+					.sorted((x,y) -> Integer.valueOf(x).compareTo(Integer.valueOf(y)))
+					.collect(Collectors.toList());
+	}
+	
+	private void shutdown() {
+		Codec codec = new SLCodec();    
+		Ontology jmo = JADEManagementOntology.getInstance();
+		getAgent().getContentManager().registerLanguage(codec);
+		getAgent().getContentManager().registerOntology(jmo);
+		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+		msg.addReceiver(getAgent().getAMS());
+		msg.setLanguage(codec.getName());
+		msg.setOntology(jmo.getName());
+		try {
+			getAgent().getContentManager().fillContent(msg, new Action(getAgent().getAID(), new ShutdownPlatform()));
+			getAgent().send(msg);
+		}
+		catch (Exception e) {}		
+	}	
 }

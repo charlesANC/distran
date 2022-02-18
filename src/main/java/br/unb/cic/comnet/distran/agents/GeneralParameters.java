@@ -42,7 +42,7 @@ public class GeneralParameters {
 	
 	public static String mountOutputFileName(String fileName) {
 		String dir = System.getProperty("outDir", ".\\");
-		//String dir = System.getProperty("outDir", "c:\\temp\\Thesis\\");
+		//String dir = System.getProperty("outDir", "c:\\temp\\");
 		File file = new File(dir, fileName);
 		return file.getAbsolutePath();
 	}

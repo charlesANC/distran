@@ -14,12 +14,12 @@ import jade.core.AID;
 import jade.core.Agent;
 import jade.util.Logger;
 
-public class DirectTrustTranscodingAssignment extends AbstractTranscodingAssigment {
+public class ReNosTranscodingAssignment extends AbstractTranscodingAssigment {
 	private static final long serialVersionUID = 1L;
 	
 	Logger logger = Logger.getJADELogger(getClass().getName());
 
-	public DirectTrustTranscodingAssignment(Agent a, long period) {
+	public ReNosTranscodingAssignment(Agent a, long period) {
 		super(a, period);
 	}
 

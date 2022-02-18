@@ -60,7 +60,7 @@ public class SequentialBroker extends Broker {
 		if (getArguments().length == 0 || getArguments()[0].toString().equals("R")) {
 			addBehaviour(new RandomTranscodingAssignment(this, GeneralParameters.getDuration()));
 		} else if (getArguments()[0].toString().equals("T")) {
-			addBehaviour(new DirectTrustTranscodingAssignment(this, GeneralParameters.getDuration()));			
+			addBehaviour(new ReNosTranscodingAssignment(this, GeneralParameters.getDuration()));			
 		} else if (getArguments()[0].toString().equals("U")) {
 			addBehaviour(new UCB1TranscodingAssigment(this, GeneralParameters.getDuration()));
 		}

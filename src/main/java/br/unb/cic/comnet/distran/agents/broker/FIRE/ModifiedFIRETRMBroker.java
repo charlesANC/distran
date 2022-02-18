@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 import br.unb.cic.comnet.distran.agents.GeneralParameters;
 import br.unb.cic.comnet.distran.agents.broker.Broker;
-import br.unb.cic.comnet.distran.agents.broker.DirectTrustTranscodingAssignment;
+import br.unb.cic.comnet.distran.agents.broker.ReNosTranscodingAssignment;
 import br.unb.cic.comnet.distran.agents.broker.PlaylistProviderBehaviour;
 import br.unb.cic.comnet.distran.agents.broker.PrintUtilityBehaviour;
 import br.unb.cic.comnet.distran.agents.broker.SegmentGenerator;
@@ -55,7 +55,7 @@ public class ModifiedFIRETRMBroker extends Broker {
 		addBehaviour(new PlaylistProviderBehaviour(100, 200));
 		addBehaviour(new PrintUtilityBehaviour(this, 12000));
 		
-		addBehaviour(new DirectTrustTranscodingAssignment(this, GeneralParameters.getDuration()));			
+		addBehaviour(new ReNosTranscodingAssignment(this, GeneralParameters.getDuration()));			
 		
 		publishMe();
 	}
